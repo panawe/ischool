@@ -8,37 +8,52 @@ import javax.persistence.Id;
 import javax.persistence.Table;
 
 @Entity
-@Table(name = "CONFIGURATION")
+@Table(name="CONFIGURATION")
 public class Configuration extends BaseEntity {
 
 	@Id
 	@GeneratedValue(strategy = GenerationType.IDENTITY)
-	@Column(name = "CONFIGURATION_ID")
+	@Column(name = "CONFIG_ID")
 	private Long id;
 
-	@Column(name = "NAME")
+
+	//@Length(max = 45)
+	@Column(name = "GROUP_NAME")
+	private String groupName;
+
+	//@NotNull
+	//@Length(max = 50)
 	private String name;
 
-	@Column(name = "VALUE")
+	//@Length(max = 200)
 	private String value;
 	
-	@Column(name = "DATA_TYPE")
-	private String dataType;
-	
-	@Column(name = "DESCRIPTION")
+	//@Length(max=200)
 	private String description;
- 
-	@Override
-	public Long getId() {
+
+	
+	public String getDescription() {
+		return description;
+	}
+
+	public void setDescription(String description) {
+		this.description = description;
+	}
+
+	public Configuration() {
+	}
+
+	public Configuration(Configuration conf) {
+		// TODO Auto-generated constructor stub
+		this.name=conf.getName();
+		this.value=conf.getValue();
+		this.description=conf.getDescription();
+		this.groupName=conf.getGroupName();
+	}
+
+		@Override
+		public Long getId() {
 		return id;
-	}
-
-	public String getDataType() {
-		return dataType;
-	}
-
-	public void setDataType(String dataType) {
-		this.dataType = dataType;
 	}
 
 	public void setId(Long id) {
@@ -53,14 +68,6 @@ public class Configuration extends BaseEntity {
 		this.name = name;
 	}
 
-	public String getDescription() {
-		return description;
-	}
-
-	public void setDescription(String description) {
-		this.description = description;
-	}
-
 	public String getValue() {
 		return value;
 	}
@@ -69,11 +76,16 @@ public class Configuration extends BaseEntity {
 		this.value = value;
 	}
 
-	@Override
+		@Override
 	public String toString() {
-		return "Configuration [id=" + id + ", name=" + name + ", value=" + value + ", description=" + description + "]";
+		return name;
 	}
 
- 
+	public String getGroupName() {
+		return groupName;
+	}
 
+	public void setGroupName(String groupName) {
+		this.groupName = groupName;
+	}
 }

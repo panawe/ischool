@@ -8,15 +8,15 @@ import javax.persistence.Id;
 import javax.persistence.Table;
 
 @Entity
-@Table(name = "POSITION")
+@Table(name="POSITION")
 public class Position extends BaseEntity {
-
+	
 	@Id
 	@GeneratedValue(strategy = GenerationType.IDENTITY)
-	@Column(name = "POSITION_ID")
+	@Column(name="POSITION_ID")
 	private Long id;
-
-	@Column(name = "NAME")
+	
+	@Column(name="NAME")
 	private String name;
 
 	@Override
@@ -40,5 +40,6 @@ public class Position extends BaseEntity {
 	public String toString() {
 		return name;
 	}
+	
 
 }

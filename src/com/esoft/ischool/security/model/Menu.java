@@ -15,7 +15,7 @@ import javax.persistence.Transient;
 import com.esoft.ischool.model.BaseEntity;
 
 @Entity
-@Table(name = "MENU")
+@Table(name="MENU")
 public class Menu extends BaseEntity implements Comparable, Serializable {
 
 	@Id
@@ -27,14 +27,15 @@ public class Menu extends BaseEntity implements Comparable, Serializable {
 	@JoinColumn(name = "PARENT_MENU_ID", nullable = true)
 	private Menu menuParent;
 
-	// @NotNull
-	// @Length(max = 50)
+	//@NotNull
+	//@Pattern(regex = ".*[^\\s].*")
+	//@Length(max = 50)
 	private String name;
 
 	@Column(name = "SECURITY_CODE")
 	private Long securityCode;
 
-	// @Length(max = 200)
+	//@Length(max = 200)
 	private String description;
 
 	private String url;
@@ -58,7 +59,7 @@ public class Menu extends BaseEntity implements Comparable, Serializable {
 
 	public Menu(Menu menu, Menu menuP) {
 		// TODO Auto-generated constructor stub
-		this.menuParent = menuP;
+	    this.menuParent = menuP;
 		this.accessLevel = menu.getAccessLevel();
 		this.securityCode = menu.getSecurityCode();
 		this.accessLevelCheck = menu.getAccessLevelCheck();
@@ -88,7 +89,8 @@ public class Menu extends BaseEntity implements Comparable, Serializable {
 	public int compareTo(Object o) {
 
 		if (o instanceof Menu) {
-			return id == ((Menu) o).getId() ? 0 : (id > ((Menu) o).getId() ? 1 : -1);
+			return id == ((Menu) o).getId() ? 0 : (id > ((Menu) o).getId() ? 1
+					: -1);
 
 		} else {
 			return 1;
@@ -110,7 +112,9 @@ public class Menu extends BaseEntity implements Comparable, Serializable {
 
 	@Override
 	public String toString() {
-		return id + " " + name + " " + (menuParent != null ? menuParent.getName() : "") + " " + accessLevelCheck;
+		return id + " " + name + " "
+				+ (menuParent != null ? menuParent.getName() : "") + " "
+				+ accessLevelCheck;
 	}
 
 	public String getDescription() {

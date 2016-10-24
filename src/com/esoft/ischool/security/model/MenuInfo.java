@@ -36,10 +36,10 @@ public class MenuInfo implements Serializable {
 	public void setMenuParentName(String menuParentName) {
 		this.menuParentName = menuParentName;
 	}
-
+	
 	@Override
 	public boolean equals(Object o) {
-
+		
 		if (this == o)
 			return true;
 		if (o == null)
@@ -47,6 +47,6 @@ public class MenuInfo implements Serializable {
 		if (!(o instanceof MenuInfo))
 			return false;
 		MenuInfo that = (MenuInfo) o;
-		return getId().equals(that.getId());
+		return getId().equals(that.getId()); 
 	}
 }

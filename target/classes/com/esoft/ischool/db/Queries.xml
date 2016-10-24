@@ -3,10 +3,1089 @@
 "http://hibernate.sourceforge.net/hibernate-mapping-3.0.dtd">
 <hibernate-mapping package="com.edu.db">
 
-	<sql-query name="getUser">
-		<return alias="getUser" class="com.ukad.security.model.User" />
+	<sql-query name="getUserTests">
+		<return alias="getUserTests" class="com.edu.model.UserTest" />
+
+		SELECT * FROM USERS_TEST UT WHERE UT.USER_ID = :userId
+		ORDER BY
+		UT.UT_ID DESC
+		LIMIT 25
+	  
+	<![CDATA[
+	]]>
+	</sql-query>
+	<sql-query name="getSchoolYearForDate">
+		<return alias="getSchoolYearForDate" class="com.edu.model.SchoolYear" />
+
+		SELECT * FROM SCHOOLYEAR SY
+		WHERE SY.SCHOOL_ID = :schoolId AND
+		:eventDate BETWEEN SY.BEGIN_DATE AND
+		SY.END_DATE
+	  
+	<![CDATA[
+	]]>
+	</sql-query>
+	<sql-query name="fetchCurrentYearTuitions">
+		<return alias="fetchCurrentYearTuitions" class="com.edu.model.Tuition" />
+
+		SELECT T.* FROM TUITION T, SCHOOLYEAR SY
+		WHERE T.SCHOOL_ID = :schoolId
+		AND
+		T.SCHOOLYEAR_ID=SY.SCHOOLYEAR_ID AND
+		NOW() BETWEEN SY.BEGIN_DATE AND
+		SY.END_DATE
+	  
+	<![CDATA[
+	]]>
+	</sql-query>
+	<sql-query name="getStudentTuition">
+		<return alias="getStudentTuition" class="com.edu.model.StudentTuition" />
+
+		SELECT * FROM STUDENT_TUITION
+		WHERE STUDENT_ID= :studentId
+		AND TUITION_ID=:tuitionId
+	  
+	<![CDATA[
+	]]>
+	</sql-query>
+	<sql-query name="fetchTuitionsForYear">
+		<return alias="fetchTuitionsForYear" class="com.edu.model.Tuition" />
+
+		SELECT T.* FROM TUITION T, SCHOOLYEAR SY
+		WHERE T.SCHOOL_ID = :schoolId
+		AND
+		T.SCHOOLYEAR_ID=SY.SCHOOLYEAR_ID AND
+		SY.NAME= :year
+	  
+	<![CDATA[
+	]]>
+	</sql-query>
+	<sql-query name="fetchSortedTuitions">
+		<return alias="fetchSortedTuitions" class="com.edu.model.Tuition" />
+
+		SELECT T.* FROM TUITION T, SCHOOLYEAR SY
+		WHERE T.SCHOOL_ID = :schoolId
+		AND
+		T.SCHOOLYEAR_ID=SY.SCHOOLYEAR_ID
+		AND
+		SY.NAME = :schoolYearName
+		ORDER BY SY.NAME DESC
+	  
+	<![CDATA[
+	]]>
+	</sql-query>
+	<sql-query name="getCurriculumsForStudent">
+		<return alias="getCurriculumsForStudent" class="com.edu.model.Curriculum" />
+		SELECT C.* FROM CURRICULUM C
+		INNER JOIN LEVELS L ON C.LEVEL_ID =
+		L.LEVEL_ID
+		INNER JOIN CLASS CL ON CL.LEVEL_ID = L.LEVEL_ID
+		INNER JOIN
+		SENROLLMENT S ON (S.CLASS_ID = CL.CLASS_ID AND S.SCHOOLYEAR_ID =
+		C.SCHOOLYEAR_ID)
+		INNER JOIN STUDENT ST ON S.ENROLLMENT_ID =
+		ST.ENROLLMENT_ID
+		WHERE S.STUDENT_ID = :studentId AND S.SCHOOL_ID =
+		:schoolId
+
+	<![CDATA[
+	]]>
+	</sql-query>
+	<sql-query name="getCurriculumsForCurrentYear">
+		<return alias="getCurriculumsForCurrentYear" class="com.edu.model.Curriculum" />
+		SELECT C.* FROM CURRICULUM C
+		INNER JOIN SCHOOLYEAR SY ON
+		C.SCHOOLYEAR_ID = SY.SCHOOLYEAR_ID
+		WHERE C.SCHOOL_ID = :schoolId AND
+		NOW() BETWEEN SY.BEGIN_DATE AND
+		SY.END_DATE
+		ORDER BY C.LEVEL_ID,
+		C.WEEK_NBR, C.SUBJECT_ID
+
+	<![CDATA[
+	]]>
+	</sql-query>
+	<sql-query name="getThisYearFurnitures">
+		<return alias="getThisYearFurnitures" class="com.edu.model.Furniture" />
+		SELECT C.* FROM FURNITURE C
+		INNER JOIN SCHOOLYEAR SY ON C.SCHOOLYEAR_ID
+		= SY.SCHOOLYEAR_ID
+		WHERE C.SCHOOL_ID = :schoolId AND NOW() BETWEEN
+		SY.BEGIN_DATE AND
+		SY.END_DATE
+		ORDER BY C.LEVEL_ID, C.SUBJECT_ID
+
+	<![CDATA[
+	]]>
+	</sql-query>
+
+	<sql-query name="getCurriculumProgressesForStudent">
+		<return alias="getCurriculumProgressesForStudent" class="com.edu.model.CurriculumProgress" />
+		SELECT CP.* FROM CURRICULUM_PROGRESS CP
+		INNER JOIN CURRICULUM C ON
+		CP.CURRICULUM_ID = C.CURRICULUM_ID
+		INNER JOIN LEVELS L ON C.LEVEL_ID =
+		L.LEVEL_ID
+		INNER JOIN CLASS CL ON CL.LEVEL_ID = L.LEVEL_ID
+		INNER JOIN
+		SENROLLMENT S ON (S.CLASS_ID = CL.CLASS_ID AND S.SCHOOLYEAR_ID =
+		C.SCHOOLYEAR_ID)
+		INNER JOIN STUDENT ST ON S.ENROLLMENT_ID =
+		ST.ENROLLMENT_ID
+		WHERE S.STUDENT_ID = :studentId AND S.SCHOOL_ID =
+		:schoolId
+
+	<![CDATA[
+	]]>
+	</sql-query>
+
+
+	<sql-query name="getCurriculumsForTeacher">
+		<return alias="getCurriculumsForTeacher" class="com.edu.model.Curriculum" />
+		SELECT C.* FROM CURRICULUM C
+		INNER JOIN LEVELS L ON C.LEVEL_ID =
+		L.LEVEL_ID
+		INNER JOIN CLASS CL ON CL.LEVEL_ID = L.LEVEL_ID
+		INNER JOIN
+		COURSE CO ON (CL.CLASS_ID = CO.CLASS_ID AND CO.SUBJECT_ID =
+		C.SUBJECT_ID)
+		INNER JOIN SCHOOLYEAR SY ON C.SCHOOLYEAR_ID =
+		SY.SCHOOLYEAR_ID
+		WHERE CO.TEACHER_ID = :teacherId AND CO.SCHOOL_ID =
+		:schoolId
+		AND NOW() BETWEEN SY.BEGIN_DATE AND SY.END_DATE
+
+	<![CDATA[
+	]]>
+	</sql-query>
+
+	<sql-query name="getCurriculumProgressesForTeacher">
+		<return alias="getCurriculumProgressesForTeacher" class="com.edu.model.CurriculumProgress" />
+		SELECT CP.* FROM CURRICULUM_PROGRESS CP
+		INNER JOIN CURRICULUM C ON
+		CP.CURRICULUM_ID = C.CURRICULUM_ID
+		INNER JOIN LEVELS L ON C.LEVEL_ID =
+		L.LEVEL_ID
+		INNER JOIN CLASS CL ON CL.LEVEL_ID = L.LEVEL_ID
+		INNER JOIN
+		COURSE CO ON (CL.CLASS_ID = CO.CLASS_ID AND CO.SUBJECT_ID =
+		C.SUBJECT_ID)
+		INNER JOIN SCHOOLYEAR SY ON C.SCHOOLYEAR_ID =
+		SY.SCHOOLYEAR_ID
+		WHERE CO.TEACHER_ID = :teacherId AND CO.SCHOOL_ID =
+		:schoolId
+		AND NOW() BETWEEN SY.BEGIN_DATE AND SY.END_DATE
+	<![CDATA[
+	]]>
+	</sql-query>
+
+	<sql-query name="getCourse">
+		<return alias="getCourse" class="com.edu.model.Course" />
+
+		SELECT C.* FROM COURSE C, SUBJECT S, CLASS CL WHERE
+		C.SUBJECT_ID
+		=S.SUBJECT_ID AND C.CLASS_ID =CL.CLASS_ID
+		AND S.NAME = :subjectName
+		AND
+		CL.NAME= :className
+		ORDER BY C.END_DATE DESC
+	  
+	<![CDATA[
+	]]>
+	</sql-query>
+
+	<sql-query name="getCurrentTermForClass">
+		<return alias="getCurrentTermForClass" class="com.edu.model.Term" />
+
+		SELECT * FROM TERM T WHERE TERM_ID =(SELECT MAX(TERM_ID)
+		FROM TIMETABLE
+		WHERE SCHOOLYEAR_ID= :schoolYearId
+		AND CLASS_ID= :classId)
+	  
+	<![CDATA[
+	]]>
+	</sql-query>
+
+	<sql-query name="getTeachers">
+		<return alias="getTeacher" class="com.edu.model.Teacher" />
+
+		SELECT * FROM TEACHER T, USERS U WHERE U.USER_ID=T.USER_ID
+		AND
+		T.SCHOOL_ID =:schoolId AND T.STATUS!=0
+		ORDER BY U.USER_ID, T.LAST_NAME
+	  
+	<![CDATA[
+	]]>
+	</sql-query>
+	<sql-query name="getAverages">
+		<return alias="getAverages" class="com.edu.model.Averages" />
+
+		SELECT * FROM AVERAGES WHERE SCHOOL_ID=:schoolId
+		AND
+		SCHOOLYEAR_ID=:schoolYearId
+		AND TERM_ID=:termId
+		AND
+		CLASS_NAME=:className
+	  
+	<![CDATA[
+	]]>
+	</sql-query>
+
+	<sql-query name="getAveragesByStudentAndTerm">
+		<return alias="getAveragesByStudentAndTerm" class="com.edu.model.Averages" />
+
+		SELECT * FROM AVERAGES WHERE SCHOOL_ID=:schoolId
+		AND
+		SCHOOLYEAR_ID=:schoolYearId
+		AND TERM_ID=:termId
+		AND
+		CLASS_NAME=:className
+		AND STUDENT_ID = :studentId
+	  
+	<![CDATA[
+	]]>
+	</sql-query>
+
+	<sql-query name="getAveragesByStudent">
+		<return alias="getAveragesByStudent" class="com.edu.model.Averages" />
+
+		SELECT * FROM AVERAGES WHERE SCHOOL_ID=:schoolId
+		AND
+		SCHOOLYEAR_ID=:schoolYearId
+		AND
+		CLASS_NAME=:className
+		AND STUDENT_ID =
+		:studentId
+	  
+	<![CDATA[
+	]]>
+	</sql-query>
+
+
+	<sql-query name="getOneAverage">
+		<return alias="getOneAverage" class="com.edu.model.Averages" />
+
+		SELECT * FROM AVERAGES WHERE SCHOOL_ID=:schoolId
+		AND
+		SCHOOLYEAR_ID=:schoolYearId
+		AND TERM_ID=:termId
+		AND
+		CLASS_NAME=:className
+		LIMIT 1
+	  
+	<![CDATA[
+	]]>
+	</sql-query>
+
+	<sql-query name="getAdminUser">
+		<return alias="getAdminUser" class="com.edu.security.model.User" />
+
+		SELECT *
+		FROM USERS
+		WHERE SCHOOL_ID= :schoolId
+		ORDER BY USER_ID
+		LIMIT 1
+	  
+	<![CDATA[
+	]]>
+	</sql-query>
+
+	<sql-query name="getMarks">
+		<return alias="getMarks" class="com.edu.model.Mark" />
+
+		SELECT M.* FROM MARK M, SENROLLMENT SE, EXAM E
+		WHERE
+		M.ENROLLMENT_ID=SE.ENROLLMENT_ID
+		AND E.EXAM_ID = M.EXAM_ID
+		AND
+		E.PUBLISH_MARKS=1
+		AND SE.STUDENT_ID= :studentId
+		ORDER BY M.CREATE_DATE
+		DESC
+			  
+	<![CDATA[
+	]]>
+	</sql-query>
+
+
+	<sql-query name="getTimeTablesByTeacherId">
+		<return alias="getTimeTablesByTeacherId" class="com.edu.model.TimeTable" />
+
+		SELECT TIMETABLE.* FROM TIMETABLE, COURSE
+		WHERE TIMETABLE.COURSE_ID =
+		COURSE.COURSE_ID
+		AND COURSE.TEACHER_ID = :teacherId
+		AND
+		TIMETABLE.YEAR_ID = :yearId
+		AND TIMETABLE.TERM_ID = :termId
+		ORDER BY
+		BEGIN_DATE
+			  
+	<![CDATA[
+	]]>
+	</sql-query>
+
+
+	<sql-query name="getUnapprovedExams">
+		<return alias="getUnapprovedExams" class="com.edu.model.Exam" />
+
+		SELECT E.* FROM EXAM E, COURSE C, TEACHER T
+		WHERE C.COURSE_ID =
+		E.COURSE_ID
+		AND C.TEACHER_ID=T.TEACHER_ID
+		AND T.USER_ID=:userId
+		AND
+		EXISTS(SELECT 1 FROM MARK M WHERE M.EXAM_ID =E.EXAM_ID AND
+		M.APPROVED_BY IS NULL)
+			  
+	<![CDATA[
+	]]>
+
+	</sql-query>
+
+	<sql-query name="getTop10Marks">
+		<return alias="getTop10Marks" class="com.edu.model.Mark" />
+
+		SELECT M.* FROM MARK M, SENROLLMENT SE, EXAM E
+		WHERE
+		M.ENROLLMENT_ID=SE.ENROLLMENT_ID
+		AND E.EXAM_ID = M.EXAM_ID
+		AND
+		E.PUBLISH_MARKS=1
+		AND SE.STUDENT_ID= :studentId
+		ORDER BY M.CREATE_DATE
+		DESC
+		LIMIT 25
+			  
+	<![CDATA[
+	]]>
+	</sql-query>
+	<sql-query name="getPendingQuestions">
+		<return alias="getCourse" class="com.edu.model.TestQuestion" />
+
+		SELECT TQ.* FROM TEST_QUESTION TQ, USERS_TEST UT WHERE UT.TEST_ID =
+		TQ.TEST_ID
+		AND NOT EXISTS(SELECT 1 FROM QNA Q WHERE Q.UT_ID = UT.UT_ID
+		AND
+		TQ.QUESTION_ID = Q.QUESTION_ID)
+		AND TQ.TEST_ID = :testId
+		AND UT_ID =
+		:userTestId
+		ORDER BY TQ.QUESTION_SEQ
+
+	<![CDATA[
+	]]>
+	</sql-query>
+
+	<sql-query name="getTeacher">
+		<return alias="getTeacher" class="com.edu.model.Teacher" />
+
+		SELECT T.* FROM TEACHER T, COURSE C, SUBJECT S, CLASS
+		CL WHERE
+		C.SUBJECT_ID =S.SUBJECT_ID AND C.CLASS_ID =CL.CLASS_ID
+		AND
+		T.TEACHER_ID=C.TEACHER_ID
+		AND S.NAME = :subjectName AND CL.NAME=
+		:className 
+	  
+	<![CDATA[
+	]]>
+	</sql-query>
+
+	<sql-query name="getTestQuestions">
+		<return alias="getTestQuestions" class="com.edu.model.Question" />
+
+		SELECT Q.* FROM QUESTION Q, TEST_QUESTION TQ WHERE
+		TQ.QUESTION_ID
+		=Q.QUESTION_ID AND TQ.TEST_ID = :testId ORDER BY TQ.QUESTION_SEQ		 
+	  
+	<![CDATA[
+	]]>
+	</sql-query>
+
+	<sql-query name="getKidsMenu">
+		<return alias="getKidsMenu" class="com.edu.security.model.Menu" />
+
+		SELECT * FROM MENU WHERE PARENT_MENU_ID= :parentId
+	  
+	<![CDATA[
+	]]>
+	</sql-query>
+
+	<sql-query name="getStatudentOfAClass">
+		<return alias="student" class="com.edu.model.Student" />
+		<return-scalar column="MARK" type="java.lang.Double" />
+		<return-scalar column="grade" type="java.lang.String" />
+		<return-scalar column="approvedBy" type="java.lang.Long" />
+
+		SELECT S.*, M.MARK, G.NAME grade, M.APPROVED_BY approvedBy FROM
+		STUDENT S, EXAM EX, SENROLLMENT SE LEFT OUTER JOIN MARK M ON
+		(SE.ENROLLMENT_ID=M.ENROLLMENT_ID AND M.EXAM_ID = :examId)
+		LEFT OUTER
+		JOIN GRADE G ON (G.GRADE_ID =M.GRADE_ID) WHERE S.STUDENT_ID =
+		SE.STUDENT_ID AND EX.EXAM_ID = :examId AND EX.SCHOOLYEAR_ID
+		=SE.SCHOOLYEAR_ID
+		AND SE.CLASS_ID= :classId 
+	  
+	<![CDATA[
+	]]>
+	</sql-query>
+
+	<sql-query name="getActiveStudentCount">
+		<return-scalar column="stCount" type="java.lang.Integer" />
+
+		SELECT COUNT(*) stCount FROM STUDENT WHERE STATUS=1  
+	  
+	<![CDATA[
+	]]>
+	</sql-query>
+	<sql-query name="getPublishedMarkVOs">
+		<return-scalar column="id" type="java.lang.Long" />
+		<return-scalar column="studentId" type="java.lang.Long" />
+		<return-scalar column="studentEnrollmentId" type="java.lang.Long" />
+		<return-scalar column="mark" type="java.lang.Double" />
+		<return-scalar column="maxMark" type="java.lang.Double" />
+		<return-scalar column="schoolYear" type="java.lang.String" />
+		<return-scalar column="school" type="java.lang.String" />
+		<return-scalar column="subject" type="java.lang.String" />
+		<return-scalar column="studentFirstName" type="java.lang.String" />
+		<return-scalar column="studentLastName" type="java.lang.String" />
+		<return-scalar column="examName" type="java.lang.String" />
+		<return-scalar column="examDate" type="java.util.Date" />
+		<return-scalar column="className" type="java.lang.String" />
+		<return-scalar column="examType" type="java.lang.String" />
+		<return-scalar column="grade" type="java.lang.String" />
+		<return-scalar column="approvedBy" type="java.lang.Long" />
+		SELECT MARK_ID id,ST.STUDENT_ID studentId, M.ENROLLMENT_ID
+		studentEnrollmentId,
+		M.MARK mark, E.MAX_MARK maxMark,SY.NAME
+		schoolYear, SC.NAME school, S.NAME
+		subject,ST.FIRST_NAME
+		studentFirstName, ST.LAST_NAME studentLastName, E.NAME examName,
+		E.EXAM_DATE examDate, CL.NAME className, ET.NAME examType, G.NAME
+		grade, M.APPROVED_BY approvedBy
+		FROM MARK M INNER JOIN EXAM E ON
+		E.EXAM_ID = M.EXAM_ID
+		INNER JOIN SCHOOLYEAR SY ON
+		SY.SCHOOLYEAR_ID=E.SCHOOLYEAR_ID
+		INNER JOIN SCHOOL SC ON M.SCHOOL_ID =
+		SC.SCHOOL_ID
+		INNER JOIN EXAM_TYPE ET ON E.EXAM_TYPE_ID =
+		ET.EXAM_TYPE_ID
+		INNER JOIN COURSE C ON C.COURSE_ID = E.COURSE_ID
+		INNER
+		JOIN SUBJECT S ON C.SUBJECT_ID = S.SUBJECT_ID
+		INNER JOIN CLASS CL ON
+		C.CLASS_ID = CL.CLASS_ID
+		INNER JOIN GRADE G ON M.GRADE_ID = G.GRADE_ID
+		INNER JOIN SENROLLMENT SE ON SE.ENROLLMENT_ID = M.ENROLLMENT_ID
+		INNER
+		JOIN STUDENT ST ON SE.STUDENT_ID=ST.STUDENT_ID
+		WHERE ST.STUDENT_ID=
+		:studentId AND E.PUBLISH_MARKS=1
+	  
+	<![CDATA[
+	]]>
+	</sql-query>
+
+	<sql-query name="getAllExamVOs">
+		<return-scalar column="id" type="java.lang.Long" />
+		<return-scalar column="name" type="java.lang.String" />
+		<return-scalar column="examDate" type="java.util.Date" />
+		<return-scalar column="schoolYear" type="java.lang.String" />
+		<return-scalar column="examType" type="java.lang.String" />
+		<return-scalar column="term" type="java.lang.String" />
+		<return-scalar column="course" type="java.lang.String" />
+		<return-scalar column="ratio" type="java.lang.Integer" />
+		<return-scalar column="evaluationType" type="java.lang.Short" />
+		<return-scalar column="publishMarks" type="java.lang.Short" />
+		<return-scalar column="maxMark" type="java.lang.Double" />
+		<return-scalar column="className" type="java.lang.String" />
+		SELECT
+		E.EXAM_ID id,
+		E.NAME name,
+		E.EXAM_DATE examDate,
+		SY.NAME
+		schoolYear,
+		ET.NAME examType,
+		T.NAME term,
+		S.NAME course,
+		RATIO ratio,
+		EVALUATION_TYPE evaluationType,
+		PUBLISH_MARKS publishMarks,
+		E.MAX_MARK
+		maxMark,
+		CL.NAME className
+		FROM EXAM E, SCHOOLYEAR SY,EXAM_TYPE ET, TERM
+		T, COURSE C, SUBJECT S, CLASS CL
+		WHERE E.SCHOOLYEAR_ID =
+		SY.SCHOOLYEAR_ID
+		AND E.EXAM_TYPE_ID = ET.EXAM_TYPE_ID
+		AND E.TERM_ID =
+		T.TERM_ID
+		AND E.COURSE_ID = C.COURSE_ID
+		AND S.SUBJECT_ID=C.SUBJECT_ID
+		AND C.CLASS_ID =CL.CLASS_ID
+		AND E.SCHOOL_ID= :schoolId
+	  
+	<![CDATA[
+	]]>
+	</sql-query>
+	<sql-query name="getCummulatedRatio">
+		<return-scalar column="RATIO" type="java.lang.Double" />
+
+		SELECT SUM(RATIO) RATIO FROM EXAM E WHERE COURSE_ID= :courseId
+		AND
+		TERM_ID = :termId AND SCHOOLYEAR_ID= :schoolYearId AND EXAM_ID!=
+		:examId
+	  
+	<![CDATA[
+	]]>
+	</sql-query>
+
+	<sql-query name="getOverDueTuition">
+		<return alias="tuition" class="com.edu.model.Tuition" />
+		<return alias="senrollment" class="com.edu.model.StudentEnrollment" />
+		<return-scalar column="paymentAmount" type="java.lang.Double" />
+
+		SELECT
+		T.TUITION_ID,T.DESCRIPTION,T.REMIND_DATE,T.DUE_DATE,T.CREATE_DATE,T.MOD_DATE,T.MOD_BY,
+		T.AMOUNT, T.SCHOOLYEAR_ID,T.TUITION_TYPE_ID,
+		SENROLLMENT.*, sum(case
+		when PAYMENT.AMOUNT is null then 0 else
+		PAYMENT.AMOUNT end) as
+		paymentAmount
+		FROM TUITION T
+		INNER JOIN STUDENT_TUITION ST ON
+		ST.TUITION_ID = T.TUITION_ID
+		INNER JOIN
+		SENROLLMENT ON
+		SENROLLMENT.STUDENT_ID = ST.STUDENT_ID
+		LEFT OUTER JOIN
+		PAYMENT ON
+		T.TUITION_ID = PAYMENT.TUITION_ID AND
+		SENROLLMENT.ENROLLMENT_ID =
+		PAYMENT.ENROLLMENT_ID
+		WHERE
+		:projectedDueDate >= T.DUE_DATE
+		GROUP BY
+		T.TUITION_ID,T.DESCRIPTION,T.DUE_DATE,T.CREATE_DATE,T.MOD_DATE,T.MOD_BY,
+		T.AMOUNT, T.schoolyear_id,T.TUITION_TYPE_ID,
+		SENROLLMENT.ENROLLMENT_ID
+		HAVING T.AMOUNT > paymentAmount
+	  
+	<![CDATA[
+	]]>
+	</sql-query>
+
+	<sql-query name="getOverDueProductConsumer">
+		<return alias="getOverDueProductConsumer" class="com.edu.stocks.model.ProductConsumer" />
+
+		SELECT *
+		FROM PRODUCT_CONSUMER
+		WHERE :projectedDueDate >=
+		POSSIBLE_RETURNED_DATE AND
+		STATUS NOT IN (5, 6) AND QTY_TO_BE_RETURNED
+		> QTY_RETURNED
+	  
+	<![CDATA[
+	]]>
+	</sql-query>
+
+	<sql-query name="getReceivedStudentAlertCount">
+		<return-scalar column="alertReceivedCount" type="java.lang.Integer" />
+
+		SELECT COUNT(RECEIVER_ID) AS alertReceivedCount
+		FROM ALERT_RECEIVER
+		WHERE ALERT_ID = :alertId AND USER_ID = :userId AND TUITION_ID =
+		:tuitionId	  
+	<![CDATA[
+	]]>
+	</sql-query>
+
+	<sql-query name="getStudentPayments">
+		<return alias="tuition" class="com.edu.model.Tuition" />
+		<return-scalar column="paid" type="java.lang.Double" />
+		<return-scalar column="rebate" type="java.lang.Double" />
+		SELECT
+		T.TUITION_ID,T.SCHOOL_ID,T.DESCRIPTION,T.REMIND_DATE,T.DUE_DATE,SUM(DISTINCT
+		T.AMOUNT) AMOUNT,T.CREATE_DATE,T.MOD_DATE,T.MOD_BY,
+		SCHOOLYEAR_ID,T.TUITION_TYPE_ID, SUM(P.AMOUNT)
+		paid,SUM(P.REBATE)
+		rebate FROM TUITION T INNER JOIN STUDENT_TUITION ST ON
+		(ST.TUITION_ID=T.TUITION_ID AND ST.STUDENT_ID=:studentId) LEFT OUTER
+		JOIN PAYMENT P
+		ON
+		(ST.TUITION_ID = P.TUITION_ID AND P.ENROLLMENT_ID=
+		:enrollmentId)
+		WHERE
+		T.SCHOOL_ID= :schoolId
+		GROUP BY
+		T.TUITION_ID,T.DESCRIPTION,T.DUE_DATE,T.CREATE_DATE,T.MOD_DATE,T.MOD_BY,
+		SCHOOLYEAR_ID,T.TUITION_TYPE_ID
+	  
+	<![CDATA[
+	]]>
+	</sql-query>
+
+	<sql-query name="getStudentPaymentsByTuitionType">
+		<return alias="tuition" class="com.edu.model.Tuition" />
+		<return-scalar column="paid" type="java.lang.Double" />
+		<return-scalar column="rebate" type="java.lang.Double" />
+		<return-scalar column="studentId" type="java.lang.Long" />
+		<return-scalar column="enrollmentId" type="java.lang.Long" />
+		SELECT T.TUITION_ID, T.SCHOOL_ID, T.DESCRIPTION, T.REMIND_DATE,
+		T.DUE_DATE, SUM(DISTINCT T.AMOUNT) AMOUNT,
+		T.CREATE_DATE, T.MOD_DATE,
+		T.MOD_BY, SE.SCHOOLYEAR_ID, T.TUITION_TYPE_ID, SUM(P.AMOUNT) paid,
+		SUM(P.REBATE) rebate,
+		ST.STUDENT_ID studentId, SE.ENROLLMENT_ID enrollmentId
+		FROM TUITION T
+		INNER JOIN STUDENT_TUITION ST ON (ST.TUITION_ID=T.TUITION_ID AND
+		ST.STUDENT_ID IN (:studentIds))
+		INNER JOIN SENROLLMENT SE ON
+		(ST.STUDENT_ID = SE.STUDENT_ID AND SE.SCHOOLYEAR_ID = :schoolYearId)
+		LEFT OUTER JOIN PAYMENT P ON (ST.TUITION_ID = P.TUITION_ID AND
+		P.ENROLLMENT_ID = SE.ENROLLMENT_ID)
+		WHERE T.SCHOOL_ID= :schoolId AND
+		T.TUITION_TYPE_ID = :tuitionTypeId AND T.SCHOOLYEAR_ID = :schoolYearId
+		GROUP BY
+		T.TUITION_ID,T.DESCRIPTION,T.DUE_DATE,T.CREATE_DATE,T.MOD_DATE,T.MOD_BY,
+		SCHOOLYEAR_ID,T.TUITION_TYPE_ID, ST.STUDENT_ID
+	  
+	<![CDATA[
+	]]>
+	</sql-query>
+
+
+
+	<sql-query name="getStudentPaymentsForTuition">
+		<return alias="tuition" class="com.edu.model.Tuition" />
+		<return-scalar column="paid" type="java.lang.Double" />
+		<return-scalar column="comment" type="java.lang.String" />
+		<return-scalar column="payDate" type="java.util.Date" />
+		<return-scalar column="receivedBy" type="java.lang.String" />
+		<return-scalar column="rebate" type="java.lang.Double" />
+		SELECT
+		T.TUITION_ID,T.SCHOOL_ID,T.DESCRIPTION,T.REMIND_DATE,T.DUE_DATE,SUM(DISTINCT
+		T.AMOUNT) AMOUNT,T.CREATE_DATE,T.MOD_DATE,T.MOD_BY,
+		SCHOOLYEAR_ID,T.TUITION_TYPE_ID, SUM(P.AMOUNT) paid,
+		P.COMMENT comment,
+		P.PAYMENT_DATE payDate,CONCAT_WS('
+		',U.FIRST_NAME,U.LAST_NAME)
+		receivedBy, SUM(P.REBATE) rebate FROM
+		TUITION T INNER JOIN
+		STUDENT_TUITION ST ON (ST.TUITION_ID=T.TUITION_ID AND
+		ST.STUDENT_ID=:studentId) LEFT OUTER JOIN PAYMENT P
+		ON
+		(ST.TUITION_ID =
+		P.TUITION_ID AND P.ENROLLMENT_ID= :enrollmentId)
+		INNER JOIN USERS U ON
+		(U.USER_ID=P.MOD_BY)
+		WHERE T.TUITION_ID=
+		:tuitionId
+		AND T.SCHOOL_ID= :schoolId
+		GROUP BY
+		T.TUITION_ID,T.DESCRIPTION,T.DUE_DATE,T.CREATE_DATE,T.MOD_DATE,T.MOD_BY,
+		SCHOOLYEAR_ID,T.TUITION_TYPE_ID,P.COMMENT
+	  
+	<![CDATA[
+	]]>
+	</sql-query>
+
+	<sql-query name="getStudentPayment">
+		<return alias="payment" class="com.edu.model.Payment" />
+		SELECT * FROM PAYMENT WHERE ENROLLMENT_ID= :enrollmentId
+		AND TUITION_ID
+		= :tuitionId
+		AND SCHOOL_ID= :schoolId
+	  
+	<![CDATA[
+	]]>
+	</sql-query>
+
+	<sql-query name="getStudentsPayments">
+		<return alias="payment" class="com.edu.model.Payment" />
+
+		SELECT P.*
+		FROM PAYMENT P
+		INNER JOIN TUITION T ON T.TUITION_ID = P.TUITION_ID
+		INNER JOIN SENROLLMENT SE ON P.ENROLLMENT_ID = SE.ENROLLMENT_ID
+		AND SE.STUDENT_ID IN (:studentIds) AND SE.SCHOOLYEAR_ID = :schoolYearId
+		WHERE T.TUITION_TYPE_ID = :tuitionTypeId AND P.SCHOOL_ID= :schoolId
+		ORDER BY P.PAYMENT_DATE DESC
+	  
+	<![CDATA[
+	]]>
+	</sql-query>
+
+	<sql-query name="getMark">
+		<return alias="getMark" class="com.edu.model.Mark" />
+
+		SELECT * FROM MARK WHERE ENROLLMENT_ID = :enrollmentId AND EXAM_ID =
+		:examId 
+	  
+	<![CDATA[
+	]]>
+	</sql-query>
+
+	<sql-query name="getActiveTeachers">
+		<return alias="getActiveTeachers" class="com.edu.model.Teacher" />
+
+		SELECT * FROM TEACHER WHERE STATUS!=0 AND SCHOOL_ID= :schoolId
+	  
+	<![CDATA[
+	]]>
+	</sql-query>
+
+
+	<sql-query name="getActiveStudents">
+		<return alias="getActiveStudents" class="com.edu.model.Student" />
+
+		SELECT * FROM STUDENT WHERE STATUS!=0 AND SCHOOL_ID= :schoolId
+	  
+	<![CDATA[
+	]]>
+	</sql-query>
+
+	<sql-query name="getActiveMenus">
+		<return alias="getActiveMenus" class="com.edu.security.model.Menu" />
+
+		SELECT * FROM MENU
+	  
+	<![CDATA[
+	]]>
+	</sql-query>
+
+	<sql-query name="getActiveUsers">
+		<return alias="getActiveUsers" class="com.edu.security.model.User" />
 
 		SELECT * FROM USERS
+	  
+	<![CDATA[
+	]]>
+	</sql-query>
+
+	<sql-query name="getStudentsForYear">
+		<return alias="getStudentsForYear" class="com.edu.model.Student" />
+
+		SELECT DISTINCT S.* FROM STUDENT S, SENROLLMENT SE, SCHOOLYEAR SC
+		WHERE
+		S.STATUS!=0
+		AND S.STUDENT_ID =SE.STUDENT_ID
+		AND SC.SCHOOLYEAR_ID =
+		SE.SCHOOLYEAR_ID
+		AND SC.NAME= :year
+		AND S.SCHOOL_ID = :schoolId
+	  
+	  
+	<![CDATA[
+	]]>
+	</sql-query>
+
+	<sql-query name="getStudentsForClass">
+		<return alias="getStudentsForClass" class="com.edu.model.Student" />
+
+		SELECT DISTINCT S.* FROM STUDENT S, SENROLLMENT SE, CLASS C WHERE
+		S.STATUS!=0
+		AND S.STUDENT_ID =SE.STUDENT_ID
+		AND S.ENROLLMENT_ID =
+		SE.ENROLLMENT_ID
+		AND C.CLASS_ID = SE.CLASS_ID
+		AND C.NAME = :className
+		AND S.SCHOOL_ID = :schoolId
+	  
+	<![CDATA[
+	]]>
+	</sql-query>
+
+	<sql-query name="getStudentsForClassYear">
+		<return alias="getStudentsForClassYear" class="com.edu.model.Student" />
+
+		SELECT DISTINCT S.* FROM STUDENT S, SENROLLMENT SE, CLASS C,SCHOOLYEAR
+		SC WHERE
+		S.STATUS!=0
+		AND S.STUDENT_ID =SE.STUDENT_ID
+		AND C.CLASS_ID =
+		SE.CLASS_ID
+		AND C.NAME = :className
+		AND SC.SCHOOLYEAR_ID =
+		SE.SCHOOLYEAR_ID
+		AND SC.NAME= :year
+		AND S.SCHOOL_ID = :schoolId
+	  
+	  
+	<![CDATA[
+	]]>
+	</sql-query>
+
+	<sql-query name="getStudentCorrespondance">
+		<return alias="getStudentCorrespondance" class="com.edu.model.Receiver" />
+		SELECT * FROM RECEIVER WHERE STUDENT_ID = :studentId and
+		CORRESPONDANCE_ID = :correspondanceId
+	  
+	<![CDATA[
+	]]>
+	</sql-query>
+
+	<sql-query name="getTeacherCorrespondance">
+		<return alias="getTeacherCorrespondance" class="com.edu.model.Receiver" />
+		SELECT * FROM RECEIVER WHERE TEACHER_ID = :teacherId and
+		CORRESPONDANCE_ID = :correspondanceId
+	  
+	<![CDATA[
+	]]>
+	</sql-query>
+
+	<sql-query name="getTeacherEnrollment">
+		<return alias="getTeacherEnrollment" class="com.edu.model.TeacherEnrollment" />
+		SELECT * FROM TENROLLMENT WHERE TEACHER_ID = :teacherId and
+		CLASS_ID =
+		:levelClassId
+	  
+	<![CDATA[
+	]]>
+	</sql-query>
+
+	<sql-query name="getStudentEnrollment">
+		<return alias="getStudentEnrollment" class="com.edu.model.StudentEnrollment" />
+		SELECT * FROM SENROLLMENT WHERE STUDENT_ID = :studentId and
+		CLASS_ID =
+		:levelClassId and SCHOOLYEAR_ID = :schoolYearId
+	  
+	<![CDATA[
+	]]>
+	</sql-query>
+
+
+	<sql-query name="fetchTermResults">
+		<return-scalar column="SCHOOLYEAR" type="java.lang.String" />
+		<return-scalar column="TERMNAME" type="java.lang.String" />
+		<return-scalar column="TERM_ID" type="java.lang.Integer" />
+		<return-scalar column="CLASSNAME" type="java.lang.String" />
+		<return-scalar column="NBR_OF_STUDENTS" type="java.lang.Integer" />
+		<return-scalar column="SUBJECTNAME" type="java.lang.String" />
+		<return-scalar column="TEACHERNAME" type="java.lang.String" />
+		<return-scalar column="STUDENT_ID" type="java.lang.Integer" />
+		<return-scalar column="ENROLLMENT_ID" type="java.lang.Integer" />
+		<return-scalar column="STUDENTNAME" type="java.lang.String" />
+		<return-scalar column="MAX_MARK" type="java.lang.Integer" />
+		<return-scalar column="CLASSMARK" type="java.lang.Double" />
+		<return-scalar column="CLASSRATIO" type="java.lang.Double" />
+		<return-scalar column="EXAMMARK" type="java.lang.Double" />
+		<return-scalar column="EXAMRATIO" type="java.lang.Double" />
+		<return-scalar column="MOYENNE" type="java.lang.Double" />
+		<return-scalar column="IMAGE" type="byte[]" />
+		<return-scalar column="TEACHER_ID" type="java.lang.Integer" />
+		SELECT SY.DESCRIPTION SCHOOLYEAR, TE.NAME TERMNAME, TE.TERM_ID,
+		CL.NAME CLASSNAME, CL.NBR_STUDENTS NBR_OF_STUDENTS, SJ.NAME
+		SUBJECTNAME,
+		CONCAT_WS(' ',TC.LAST_NAME,TC.MIDDLE_NAME, TC.FIRST_NAME)
+		TEACHERNAME,
+		ST.STUDENT_ID STUDENT_ID, TC.TEACHER_ID TEACHER_ID,
+		ST.IMAGE,
+		SE.ENROLLMENT_ID,
+		CONCAT_WS(' ', ST.LAST_NAME,
+		ST.MIDDLE_NAME,ST.FIRST_NAME) STUDENTNAME,
+		CR.MAX_MARK,
+
+		SUM(
+		CASE
+		RAT.CLASSRATIO
+		WHEN 0 THEN 0
+		ELSE MEX.CLASSMARK*MEX.RATIO/RAT.CLASSRATIO
+		END) CLASSMARK,
+
+		MAX(RAT.CLASSRATIO) CLASSRATIO,
+
+		SUM(
+		CASE RAT.EXAMRATIO
+		WHEN 0 THEN 0
+		ELSE MEX.EXAMMARK*MEX.RATIO/RAT.EXAMRATIO
+		END) EXAMMARK,
+
+		MAX(RAT.EXAMRATIO) EXAMRATIO,
+
+		SUM(
+		CASE RAT.CLASSRATIO
+		WHEN 0 THEN 0
+		ELSE
+		MEX.CLASSMARK*MEX.RATIO/RAT.CLASSRATIO
+		END) * MAX(RAT.CLASSRATIO)/100 +
+		SUM(
+		CASE RAT.EXAMRATIO
+		WHEN 0 THEN 0
+		ELSE
+		MEX.EXAMMARK*MEX.RATIO/RAT.EXAMRATIO
+		END) * MAX(RAT.EXAMRATIO)/100
+		MOYENNE
+
+
+		FROM
+		STUDENT ST,SENROLLMENT SE,TERM TE,CLASS CL,SUBJECT SJ,
+		TEACHER TC, COURSE CR, SCHOOLYEAR SY,
+
+
+		(SELECT E.EXAM_ID, ENROLLMENT_ID,
+		TERM_ID, COURSE_ID,SCHOOLYEAR_ID,
+		CASE EVALUATION_TYPE
+		WHEN 0 THEN MARK
+		ELSE 0
+		END AS CLASSMARK,
+		CASE EVALUATION_TYPE
+		WHEN 1 THEN MARK
+		ELSE 0
+		END
+		AS EXAMMARK,
+		RATIO
+		FROM MARK M, EXAM E
+		WHERE M.EXAM_ID=E.EXAM_ID
+		AND
+		SCHOOLYEAR_ID= :yearId
+		AND TERM_ID=:termId) MEX,
+
+		(SELECT TERM_ID,
+		COURSE_ID,SCHOOLYEAR_ID,
+		SUM(
+		CASE EVALUATION_TYPE
+		WHEN 0 THEN RATIO
+		ELSE
+		0
+		END) CLASSRATIO,
+		SUM(
+		CASE EVALUATION_TYPE
+		WHEN 1 THEN RATIO
+		ELSE 0
+		END)
+		EXAMRATIO
+		FROM EXAM
+		WHERE
+		SCHOOLYEAR_ID= :yearId
+		AND TERM_ID=:termId
+		GROUP
+		BY TERM_ID, COURSE_ID) RAT
+
+		WHERE MEX.ENROLLMENT_ID = SE.ENROLLMENT_ID
+		AND RAT.SCHOOLYEAR_ID=MEX.SCHOOLYEAR_ID
+		AND ST.STUDENT_ID =
+		SE.STUDENT_ID
+		AND MEX.TERM_ID = TE.TERM_ID
+		AND MEX.COURSE_ID
+		=CR.COURSE_ID
+		AND CR.CLASS_ID =CL.CLASS_ID
+		AND CR.SUBJECT_ID
+		=SJ.SUBJECT_ID
+		AND MEX.SCHOOLYEAR_ID = SY.SCHOOLYEAR_ID
+		AND
+		TC.TEACHER_ID = CR.TEACHER_ID
+		AND RAT.TERM_ID=MEX.TERM_ID
+		AND
+		RAT.COURSE_ID= MEX.COURSE_ID
+		AND SY.SCHOOLYEAR_ID= :yearId
+		AND
+		TE.TERM_ID=:termId
+		AND CL.CLASS_ID=:classId
+
+		GROUP BY
+		SY.DESCRIPTION ,
+		TE.NAME , TE.TERM_ID,CL.NAME ,CL.NBR_STUDENTS ,SJ.NAME ,
+		CONCAT_WS('
+		',TC.LAST_NAME,TC.MIDDLE_NAME, TC.FIRST_NAME)
+		,ST.STUDENT_ID
+		,CONCAT_WS(' ', ST.LAST_NAME,
+		ST.MIDDLE_NAME,ST.FIRST_NAME)
+		,SE.ENROLLMENT_ID,
+		CR.MAX_MARK
+		ORDER BY ST.STUDENT_ID
+	  
+	<![CDATA[
+	]]>
+	</sql-query>
+
+	<sql-query name="getCourseVOs">
+		<return-scalar column="id" type="java.lang.Long" />
+		<return-scalar column="subject" type="java.lang.String" />
+		<return-scalar column="teacherFirstName" type="java.lang.String" />
+		<return-scalar column="teacherLastName" type="java.lang.String" />
+		<return-scalar column="className" type="java.lang.String" />
+		<return-scalar column="beginDate" type="java.util.Date" />
+		<return-scalar column="endDate" type="java.util.Date" />
+		<return-scalar column="groupCode" type="java.lang.String" />
+		<return-scalar column="maxMark" type="java.lang.Double" />
+		<return-scalar column="teacherId" type="java.lang.Long" />
+		SELECT COURSE_ID id, S.NAME subject, T.FIRST_NAME teacherFirstName,
+		T.LAST_NAME teacherLastName,CL.NAME className,
+		C.BEGIN_DATE beginDate,
+		C.END_DATE endDate, C.GROUP_CODE "groupCode", C.MAX_MARK maxMark,
+		T.TEACHER_ID teacherId
+		FROM COURSE C, SUBJECT S, TEACHER T, CLASS CL
+		WHERE C.SUBJECT_ID = S.SUBJECT_ID
+		AND C.TEACHER_ID = T.TEACHER_ID
+		AND
+		CL.CLASS_ID = C.CLASS_ID
+		AND C.SCHOOL_ID = :schoolId
+	
+	  
+	<![CDATA[
+	]]>
+	</sql-query>
+
+	<sql-query name="getTeacherCourseVOs">
+		<return-scalar column="id" type="java.lang.Long" />
+		<return-scalar column="subject" type="java.lang.String" />
+		<return-scalar column="teacherFirstName" type="java.lang.String" />
+		<return-scalar column="teacherLastName" type="java.lang.String" />
+		<return-scalar column="className" type="java.lang.String" />
+		<return-scalar column="beginDate" type="java.util.Date" />
+		<return-scalar column="endDate" type="java.util.Date" />
+		<return-scalar column="groupCode" type="java.lang.String" />
+		<return-scalar column="maxMark" type="java.lang.Double" />
+		<return-scalar column="teacherId" type="java.lang.Long" />
+		SELECT COURSE_ID id, S.NAME subject, T.FIRST_NAME teacherFirstName,
+		T.LAST_NAME teacherLastName,CL.NAME className,
+		C.BEGIN_DATE beginDate,
+		C.END_DATE endDate, C.GROUP_CODE "groupCode", C.MAX_MARK maxMark,
+		T.TEACHER_ID teacherId
+		FROM COURSE C, SUBJECT S, TEACHER T, CLASS CL
+		WHERE C.SUBJECT_ID = S.SUBJECT_ID
+		AND C.TEACHER_ID = T.TEACHER_ID
+		AND
+		CL.CLASS_ID = C.CLASS_ID
+		AND C.SCHOOL_ID = :schoolId
+		AND C.TEACHER_ID=
+		:teacherId
+	
+	  
+	<![CDATA[
+	]]>
+	</sql-query>
+
+
+	<sql-query name="getClassCourseVOs">
+		<return-scalar column="id" type="java.lang.Long" />
+		<return-scalar column="subject" type="java.lang.String" />
+		<return-scalar column="teacherFirstName" type="java.lang.String" />
+		<return-scalar column="teacherLastName" type="java.lang.String" />
+		<return-scalar column="className" type="java.lang.String" />
+		<return-scalar column="beginDate" type="java.util.Date" />
+		<return-scalar column="endDate" type="java.util.Date" />
+		<return-scalar column="groupCode" type="java.lang.String" />
+		<return-scalar column="maxMark" type="java.lang.Double" />
+		<return-scalar column="teacherId" type="java.lang.Long" />
+		SELECT COURSE_ID id, S.NAME subject, T.FIRST_NAME teacherFirstName,
+		T.LAST_NAME teacherLastName,CL.NAME className,
+		C.BEGIN_DATE beginDate,
+		C.END_DATE endDate, C.GROUP_CODE "groupCode", C.MAX_MARK maxMark,
+		T.TEACHER_ID teacherId
+		FROM COURSE C, SUBJECT S, TEACHER T, CLASS CL
+		WHERE C.SUBJECT_ID = S.SUBJECT_ID
+		AND C.TEACHER_ID = T.TEACHER_ID
+		AND
+		CL.CLASS_ID = C.CLASS_ID
+		AND C.SCHOOL_ID = :schoolId
+		AND C.CLASS_ID=
+		:classId
+	
 	  
 	<![CDATA[
 	]]>

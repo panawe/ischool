@@ -15,48 +15,42 @@ import org.hibernate.annotations.Fetch;
 import org.hibernate.annotations.FetchMode;
 
 import com.esoft.ischool.model.BaseEntity;
-
 @Entity
-@Table(name = "ROLES")
+@Table(name="ROLES")
 public class Roles extends BaseEntity {
-
+	
 	@Id
-	@Column(name = "ROLE_ID")
+	@Column(name="ROLE_ID")
 	@GeneratedValue(strategy = GenerationType.IDENTITY)
 	private Long id;
-
-	@Column(name = "NAME")
+	
+	@Column(name="NAME")
 	private String name;
-
-	@Column(name = "ROLE_CODE")
+	
+	@Column(name="ROLE_CODE")
 	private Integer roleCode;
 
-	@Column(name = "DESCRIPTION")
+	@Column(name="DESCRIPTION")
 	private String description;
-
+	
 	@OneToMany(mappedBy = "roles")
-	// @JoinColumn(name = "ROLE_ID")
+	@JoinColumn(name = "ROLE_ID")
 	@Fetch(FetchMode.SELECT)
 	private Set<RolesMenu> rolesMenus;
-
-	public Roles() {
-	}
-
+	public Roles(){}
 	public Roles(Roles role) {
 		// TODO Auto-generated constructor stub
-		this.name = role.getName();
-		this.roleCode = role.getRoleCode();
-		this.description = role.getDescription();
+		this.name= role.getName();
+		this.roleCode=role.getRoleCode();
+		this.description=role.getDescription();
 	}
 
 	public Integer getRoleCode() {
 		return roleCode;
 	}
-
 	public void setRoleCode(Integer roleCode) {
 		this.roleCode = roleCode;
 	}
-
 	public Set<RolesMenu> getRolesMenus() {
 		return rolesMenus;
 	}
@@ -90,10 +84,16 @@ public class Roles extends BaseEntity {
 		this.description = description;
 	}
 
+
+
 	@Override
 	public String toString() {
-		return "Level [levelId=" + id + ", name=" + name + ", getCreateDate()=" + getCreateDate() + ", getModDate()="
-				+ getModDate() + ", getModifiedBy()=" + getModifiedBy() + "]";
+		return "Level [levelId=" + id + ", name=" + name
+				+ ", getCreateDate()=" + getCreateDate() + ", getModDate()=" + getModDate()
+				+ ", getModifiedBy()=" + getModifiedBy() + "]";
 	}
+
+
+	
 
 }

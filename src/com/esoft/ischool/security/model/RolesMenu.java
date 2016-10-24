@@ -12,28 +12,25 @@ import javax.persistence.Table;
 import com.esoft.ischool.model.BaseEntity;
 
 @Entity
-@Table(name = "ROLES_MENU")
-public class RolesMenu extends BaseEntity {
+@Table(name="ROLES_MENU")
+public class RolesMenu extends BaseEntity{
 
 	@Id
-	@Column(name = "ROLE_MENU_ID")
+	@Column(name="ROLE_MENU_ID")
 	@GeneratedValue(strategy = GenerationType.IDENTITY)
 	private Long id;
-
+	
 	@ManyToOne
-	@JoinColumn(name = "ROLE_ID")
+	@JoinColumn(name="ROLE_ID")
 	private Roles roles;
-
+	
 	@ManyToOne
-	@JoinColumn(name = "MENU_ID")
+	@JoinColumn(name="MENU_ID")
 	private Menu menu;
-
+	
 	@Column(name = "ACCESS_LEVEL")
 	private Integer accessLevel;
-
-	public RolesMenu() {
-	}
-
+	public RolesMenu(){}
 	@Override
 	public Long getId() {
 		return id;

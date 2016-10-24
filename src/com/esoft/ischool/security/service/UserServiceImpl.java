@@ -10,21 +10,22 @@ import org.springframework.context.annotation.Scope;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
+import com.esoft.ischool.model.AlertReceiver;
 import com.esoft.ischool.model.BaseEntity;
-import com.esoft.ischool.model.BudgetCash;
-import com.esoft.ischool.model.Position;
-import com.esoft.ischool.model.Transaction;
+import com.esoft.ischool.model.Question;
+import com.esoft.ischool.model.School;
+import com.esoft.ischool.model.UserTest;
 import com.esoft.ischool.security.dao.UserDaoImpl;
 import com.esoft.ischool.security.model.Roles;
 import com.esoft.ischool.security.model.RolesUser;
-import com.esoft.ischool.security.model.Contribution;
 import com.esoft.ischool.security.model.Menu;
 import com.esoft.ischool.security.model.User;
 import com.esoft.ischool.service.*;
 
 @Service("userService")
-// @Scope("session")
-public class UserServiceImpl extends BaseServiceImpl implements UserService {
+
+public class UserServiceImpl extends BaseServiceImpl implements
+		UserService {
 
 	@Autowired
 	@Qualifier("userDao")
@@ -32,7 +33,8 @@ public class UserServiceImpl extends BaseServiceImpl implements UserService {
 
 	@Transactional(readOnly = true)
 	public List<Long> getRolesIdsByUser(Long userId) {
-		return userDao.getRolesUserListByUser(userId);
+		return userDao
+				.getRolesUserListByUser(userId);
 	}
 
 	@Transactional(readOnly = false)
@@ -41,17 +43,21 @@ public class UserServiceImpl extends BaseServiceImpl implements UserService {
 	}
 
 	@Transactional(readOnly = false)
-	public void savePickedList(Long loginId, Long userId, List<Long> availableItemKeys, List<Long> selectedItemKeys) {
+	public void savePickedList(Long loginId, Long userId,
+			List<Long> availableItemKeys, List<Long> selectedItemKeys) {
 		Set<RolesUser> groupUsersToAdd = new HashSet<RolesUser>();
-		// userDao.setUserId(loginId);
-		User user = (User) userDao.getById(User.class, userId);
+		//userDao.setUserId(loginId);
+		User user = (User) userDao.getById(
+				User.class, userId);
 		// load the current associations.
-		List<Long> groupIds = userDao.getRolesUserListByUser(userId);
+		List<Long> groupIds = userDao
+				.getRolesUserListByUser(userId);
 
 		// Check to see if any group get associated to the user after we
 		// retrieved our pickList.
 		for (Long groupId : groupIds) {
-			if (!(availableItemKeys.contains(groupId) || selectedItemKeys.contains(groupId)))
+			if (!(availableItemKeys.contains(groupId) || selectedItemKeys
+					.contains(groupId)))
 				selectedItemKeys.add(groupId);
 
 			if (availableItemKeys.contains(groupId))
@@ -63,12 +69,13 @@ public class UserServiceImpl extends BaseServiceImpl implements UserService {
 		}
 
 		for (Long groupId : selectedItemKeys) {
-			Roles group = (Roles) userDao.getById(Roles.class, groupId);
+			Roles group = (Roles) userDao.getById(Roles.class,
+					groupId);
 			RolesUser gu = new RolesUser();
 			gu.setRoles(group);
 			gu.setUser(user);
 
-			userDao.update(gu, user);
+			userDao.update(gu,user);
 		}
 	}
 
@@ -76,19 +83,24 @@ public class UserServiceImpl extends BaseServiceImpl implements UserService {
 		// TODO Auto-generated method stub
 		return userDao.getSubMenus(parentId);
 	}
+	
+	public List<UserTest> getUserTests(User user){		
+		return userDao.getUserTests(user);
+	}
+	
+	public List<Question> getQuestions(Long testId){
+		
+		return userDao.getQuestions(testId);
+	}
 
 	public List<Long> getGroupeIdsByUser(Long utilisateurId) {
 		// TODO Auto-generated method stub
 		return null;
 	}
 
-	@Transactional(readOnly = false)
 	public void add(User user) {
 		// TODO Auto-generated method stub
-		if (user.getPosition() == null) {
-			user.setPosition((Position) getById(Position.class, 1L));
-		}
-		userDao.save(user);
+		
 	}
 
 	public List<Roles> getAllRoles() {
@@ -101,58 +113,20 @@ public class UserServiceImpl extends BaseServiceImpl implements UserService {
 		return null;
 	}
 
-	@Override
-	public List<User> loadAllMembers() {
+	public List<BaseEntity> getPendingQuestions(Long testId, Long userTestId) {
 		// TODO Auto-generated method stub
-		return userDao.loadAllMembers();
-	}
-
-	@Override
-	public List<User> loadAllMembersPending() {
-		// TODO Auto-generated method stub
-		return userDao.loadAllMembersPending();
-	}
-
-	@Override
-	public List<User> findMembers(String searchText) {
-		// TODO Auto-generated method stub
-		return userDao.findMembers(searchText);
-	}
-
-	@Override
-	public List<User> getLeaders() {
-		// TODO Auto-generated method stub
-		return userDao.getLeaders();
-	}
-
-	@Override
-	public List<Transaction> getAllExpenses() {
-		// TODO Auto-generated method stub
-		return userDao.getAllExpenses();
-	}
-
-	@Override
-	public List<Contribution> getContributions() {
-		// TODO Auto-generated method stub
-		return userDao.getContributions();
-	}
-
-	@Override
-	public List<User> loadAllMembersWithOnlineStatus() {
-		return userDao.loadAllUsersWithOnlineStatus();
-	}
-
-	@Override
-	public List<User> findMembers(String firstName, String lastName, String login, String email) {
-		// TODO Auto-generated method stub
-		return userDao.findMembers(firstName, lastName, login, email);
-	}
-
-	@Override
-	public List<BudgetCash> getBudgetCash() {
-		// TODO Auto-generated method stub
-		return userDao.getBudgetCash();
+		return userDao.getPendingQuestions(testId, userTestId);
 	}
 	
+	public List<AlertReceiver>  getUserAlerts(User user, School school){
+		return userDao.getUserAlerts(user, school);
+	}
 	
+	public List<BaseEntity> getUnaprovedAssignments(User user){
+		return userDao.getUnapprovedAssignments(user);
+	}
+	
+	public List<BaseEntity> getPendingDemandes(School school){
+		return userDao.getPendingDemandes(school);
+	}
 }

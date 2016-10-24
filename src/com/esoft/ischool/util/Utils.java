@@ -17,36 +17,40 @@ import java.util.regex.Pattern;
 public class Utils {
 
 	public static Map<String, String> configMap;
-	private static final String charset = "0123456789abcdefghijklmnopqrstuvwxyz";
-
+    private static final String charset = "0123456789abcdefghijklmnopqrstuvwxyz";
 	public Utils() {
 		configMap = new HashMap<String, String>();
 	}
-
-	protected static ClassLoader getCurrentClassLoader(Object defaultObject) {
+	protected static ClassLoader getCurrentClassLoader(Object defaultObject){
 
 		ClassLoader loader = Thread.currentThread().getContextClassLoader();
 
-		if (loader == null) {
+		if(loader == null){
 			loader = defaultObject.getClass().getClassLoader();
 		}
 
 		return loader;
 	}
 
-	public static String getMessageResourceString(String bundleName, String key, Object params[], Locale locale) {
+	public static String getMessageResourceString(
+							String bundleName, 
+							String key, 
+							Object params[], 
+							Locale locale){
 
 		String text = null;
 
-		ResourceBundle bundle = ResourceBundle.getBundle(bundleName, locale, getCurrentClassLoader(params));
+		ResourceBundle bundle = 
+				ResourceBundle.getBundle(bundleName, locale, 
+										getCurrentClassLoader(params));
 
-		try {
+		try{
 			text = bundle.getString(key);
-		} catch (MissingResourceException e) {
+		} catch(MissingResourceException e){
 			text = "?? key " + key + " not found ??";
 		}
 
-		if (params != null) {
+		if(params != null){
 			MessageFormat mf = new MessageFormat(text, locale);
 			text = mf.format(params, new StringBuffer(), null).toString();
 		}
@@ -54,197 +58,194 @@ public class Utils {
 		return text;
 	}
 
-	public static String getRandomString(int length) {
-		Random rand = new Random(System.currentTimeMillis());
-		StringBuffer sb = new StringBuffer();
-		for (int i = 0; i < length; i++) {
-			int pos = rand.nextInt(charset.length());
-			sb.append(charset.charAt(pos));
-		}
-		return sb.toString();
-	}
+    
+    public static String getRandomString(int length) {
+        Random rand = new Random(System.currentTimeMillis());
+        StringBuffer sb = new StringBuffer();
+        for (int i = 0; i < length; i++) {
+            int pos = rand.nextInt(charset.length());
+            sb.append(charset.charAt(pos));
+        }
+        return sb.toString();
+    }
+    
+    public static int getAge(Date birthDate) {
+    	Calendar now = Calendar.getInstance();
+    	Calendar dob = Calendar.getInstance();
+    	dob.setTime(birthDate);
+    	if (dob.after(now)) {
+    	  throw new IllegalArgumentException("Can't be born in the future");
+    	}
+    	int year1 = now.get(Calendar.YEAR);
+    	int year2 = dob.get(Calendar.YEAR);
+    	int age = year1 - year2;
+    	int month1 = now.get(Calendar.MONTH);
+    	int month2 = dob.get(Calendar.MONTH);
+    	if (month2 > month1) {
+    	  age--;
+    	} else if (month1 == month2) {
+    	  int day1 = now.get(Calendar.DAY_OF_MONTH);
+    	  int day2 = dob.get(Calendar.DAY_OF_MONTH);
+    	  if (day2 > day1) {
+    	    age--;
+    	  }
+    	}
+    	
+    	return age;
+}
+ 
+    public static String truncateHTML(String text, int length, String suffix) {
+        // if the plain text is shorter than the maximum length, return the whole text
+        if (text.replaceAll("<.*?>", "").length() <= length) {
+            return text;
+        }
+        String result = "";
+        boolean trimmed = false;
+        if (suffix == null) {
+            suffix = "...";
+        }
 
-	public static int getAge(Date birthDate) {
-		Calendar now = Calendar.getInstance();
-		Calendar dob = Calendar.getInstance();
-		dob.setTime(birthDate);
-		if (dob.after(now)) {
-			throw new IllegalArgumentException("Can't be born in the future");
-		}
-		int year1 = now.get(Calendar.YEAR);
-		int year2 = dob.get(Calendar.YEAR);
-		int age = year1 - year2;
-		int month1 = now.get(Calendar.MONTH);
-		int month2 = dob.get(Calendar.MONTH);
-		if (month2 > month1) {
-			age--;
-		} else if (month1 == month2) {
-			int day1 = now.get(Calendar.DAY_OF_MONTH);
-			int day2 = dob.get(Calendar.DAY_OF_MONTH);
-			if (day2 > day1) {
-				age--;
-			}
-		}
+        /*
+         * This pattern creates tokens, where each line starts with the tag.
+         * For example, "One, <b>Two</b>, Three" produces the following:
+         *     One,
+         *     <b>Two
+         *     </b>, Three
+         */
+        Pattern tagPattern = Pattern.compile("(<.+?>)?([^<>]*)");
 
-		return age;
-	}
+        /*
+         * Checks for an empty tag, for example img, br, etc.
+         */
+        Pattern emptyTagPattern = Pattern.compile("^<\\s*(img|br|input|hr|area|base|basefont|col|frame|isindex|link|meta|param).*>$");
 
-	public static String truncateHTML(String text, int length, String suffix) {
-		// if the plain text is shorter than the maximum length, return the
-		// whole text
-		if (text.replaceAll("<.*?>", "").length() <= length) {
-			return text;
-		}
-		String result = "";
-		boolean trimmed = false;
-		if (suffix == null) {
-			suffix = "...";
-		}
+        /*
+         * Checks for closing tags, allowing leading and ending space inside the brackets
+         */
+        Pattern closingTagPattern = Pattern.compile("^<\\s*/\\s*([a-zA-Z]+)\\s*>$");
 
-		/*
-		 * This pattern creates tokens, where each line starts with the tag. For
-		 * example, "One, <b>Two</b>, Three" produces the following: One, <b>Two
-		 * </b>, Three
-		 */
-		Pattern tagPattern = Pattern.compile("(<.+?>)?([^<>]*)");
+        /*
+         * Checks for opening tags, allowing leading and ending space inside the brackets
+         */
+        Pattern openingTagPattern = Pattern.compile("^<\\s*([a-zA-Z]+).*?>$");
 
-		/*
-		 * Checks for an empty tag, for example img, br, etc.
-		 */
-		Pattern emptyTagPattern = Pattern
-				.compile("^<\\s*(img|br|input|hr|area|base|basefont|col|frame|isindex|link|meta|param).*>$");
+        /*
+         * Find &nbsp; &gt; ...
+         */
+        Pattern entityPattern = Pattern.compile("(&[0-9a-z]{2,8};|&#[0-9]{1,7};|[0-9a-f]{1,6};)");
 
-		/*
-		 * Checks for closing tags, allowing leading and ending space inside the
-		 * brackets
-		 */
-		Pattern closingTagPattern = Pattern.compile("^<\\s*/\\s*([a-zA-Z]+)\\s*>$");
+        // splits all html-tags to scanable lines
+        Matcher tagMatcher =  tagPattern.matcher(text);
+        int numTags = tagMatcher.groupCount();
 
-		/*
-		 * Checks for opening tags, allowing leading and ending space inside the
-		 * brackets
-		 */
-		Pattern openingTagPattern = Pattern.compile("^<\\s*([a-zA-Z]+).*?>$");
+        int totalLength = suffix.length();
+        List<String> openTags = new ArrayList<String>();
 
-		/*
-		 * Find &nbsp; &gt; ...
-		 */
-		Pattern entityPattern = Pattern.compile("(&[0-9a-z]{2,8};|&#[0-9]{1,7};|[0-9a-f]{1,6};)");
+        boolean proposingChop = false;
+        while (tagMatcher.find()) {
+            String tagText = tagMatcher.group(1);
+            String plainText = tagMatcher.group(2);
 
-		// splits all html-tags to scanable lines
-		Matcher tagMatcher = tagPattern.matcher(text);
-		int numTags = tagMatcher.groupCount();
+            if (proposingChop &&
+                    tagText != null && tagText.length() != 0 &&
+                    plainText != null && plainText.length() != 0) {
+                trimmed = true;
+                break;
+            }
 
-		int totalLength = suffix.length();
-		List<String> openTags = new ArrayList<String>();
+            // if there is any html-tag in this line, handle it and add it (uncounted) to the output
+            if (tagText != null && tagText.length() > 0) {
+                boolean foundMatch = false;
 
-		boolean proposingChop = false;
-		while (tagMatcher.find()) {
-			String tagText = tagMatcher.group(1);
-			String plainText = tagMatcher.group(2);
+                // if it's an "empty element" with or without xhtml-conform closing slash
+                Matcher matcher = emptyTagPattern.matcher(tagText);
+                if (matcher.find()) {
+                    foundMatch = true;
+                    // do nothing
+                }
 
-			if (proposingChop && tagText != null && tagText.length() != 0 && plainText != null
-					&& plainText.length() != 0) {
-				trimmed = true;
-				break;
-			}
+                // closing tag?
+                if (!foundMatch) {
+                    matcher = closingTagPattern.matcher(tagText);
+                    if (matcher.find()) {
+                        foundMatch = true;
+                        // delete tag from openTags list
+                        String tagName = matcher.group(1);
+                        openTags.remove(tagName.toLowerCase());
+                    }
+                }
 
-			// if there is any html-tag in this line, handle it and add it
-			// (uncounted) to the output
-			if (tagText != null && tagText.length() > 0) {
-				boolean foundMatch = false;
+                // opening tag?
+                if (!foundMatch) {
+                    matcher = openingTagPattern.matcher(tagText);
+                    if (matcher.find()) {
+                        // add tag to the beginning of openTags list
+                        String tagName = matcher.group(1);
+                        openTags.add(0, tagName.toLowerCase());
+                    }
+                }
 
-				// if it's an "empty element" with or without xhtml-conform
-				// closing slash
-				Matcher matcher = emptyTagPattern.matcher(tagText);
-				if (matcher.find()) {
-					foundMatch = true;
-					// do nothing
-				}
+                // add html-tag to result
+                result += tagText;
+            }
 
-				// closing tag?
-				if (!foundMatch) {
-					matcher = closingTagPattern.matcher(tagText);
-					if (matcher.find()) {
-						foundMatch = true;
-						// delete tag from openTags list
-						String tagName = matcher.group(1);
-						openTags.remove(tagName.toLowerCase());
-					}
-				}
+            // calculate the length of the plain text part of the line; handle entities (e.g. &nbsp;) as one character
+            int contentLength = plainText.replaceAll("&[0-9a-z]{2,8};|&#[0-9]{1,7};|[0-9a-f]{1,6};", " ").length();
+            if (totalLength + contentLength > length) {
+                // the number of characters which are left
+                int numCharsRemaining = length - totalLength;
+                int entitiesLength = 0;
+                Matcher entityMatcher = entityPattern.matcher(plainText);
+                while (entityMatcher.find()) {
+                    String entity = entityMatcher.group(1);
+                    if (numCharsRemaining > 0) {
+                        numCharsRemaining--;
+                        entitiesLength += entity.length();
+                    } else {
+                        // no more characters left
+                        break;
+                    }
+                }
 
-				// opening tag?
-				if (!foundMatch) {
-					matcher = openingTagPattern.matcher(tagText);
-					if (matcher.find()) {
-						// add tag to the beginning of openTags list
-						String tagName = matcher.group(1);
-						openTags.add(0, tagName.toLowerCase());
-					}
-				}
+                // keep us from chopping words in half
+                int proposedChopPosition = numCharsRemaining + entitiesLength;
+                int endOfWordPosition = plainText.indexOf(" ", proposedChopPosition-1);
+                if (endOfWordPosition == -1) {
+                    endOfWordPosition = plainText.length();
+                }
+                int endOfWordOffset = endOfWordPosition - proposedChopPosition;
+                if (endOfWordOffset > 6) { // chop the word if it's extra long
+                    endOfWordOffset = 0;
+                }
 
-				// add html-tag to result
-				result += tagText;
-			}
+                proposedChopPosition = numCharsRemaining + entitiesLength + endOfWordOffset;
+                if (plainText.length() >= proposedChopPosition) {
+                    result += plainText.substring(0, proposedChopPosition);
+                    proposingChop = true;
+                    if (proposedChopPosition < plainText.length()) {
+                        trimmed = true;
+                        break; // maximum length is reached, so get off the loop
+                    }
+                } else {
+                    result += plainText;
+                }
+            } else {
+                result += plainText;
+                totalLength += contentLength;
+            }
+            // if the maximum length is reached, get off the loop
+            if(totalLength >= length) {
+                trimmed = true;
+                break;
+            }
+        }
 
-			// calculate the length of the plain text part of the line; handle
-			// entities (e.g. &nbsp;) as one character
-			int contentLength = plainText.replaceAll("&[0-9a-z]{2,8};|&#[0-9]{1,7};|[0-9a-f]{1,6};", " ").length();
-			if (totalLength + contentLength > length) {
-				// the number of characters which are left
-				int numCharsRemaining = length - totalLength;
-				int entitiesLength = 0;
-				Matcher entityMatcher = entityPattern.matcher(plainText);
-				while (entityMatcher.find()) {
-					String entity = entityMatcher.group(1);
-					if (numCharsRemaining > 0) {
-						numCharsRemaining--;
-						entitiesLength += entity.length();
-					} else {
-						// no more characters left
-						break;
-					}
-				}
-
-				// keep us from chopping words in half
-				int proposedChopPosition = numCharsRemaining + entitiesLength;
-				int endOfWordPosition = plainText.indexOf(" ", proposedChopPosition - 1);
-				if (endOfWordPosition == -1) {
-					endOfWordPosition = plainText.length();
-				}
-				int endOfWordOffset = endOfWordPosition - proposedChopPosition;
-				if (endOfWordOffset > 6) { // chop the word if it's extra long
-					endOfWordOffset = 0;
-				}
-
-				proposedChopPosition = numCharsRemaining + entitiesLength + endOfWordOffset;
-				if (plainText.length() >= proposedChopPosition) {
-					result += plainText.substring(0, proposedChopPosition);
-					proposingChop = true;
-					if (proposedChopPosition < plainText.length()) {
-						trimmed = true;
-						break; // maximum length is reached, so get off the loop
-					}
-				} else {
-					result += plainText;
-				}
-			} else {
-				result += plainText;
-				totalLength += contentLength;
-			}
-			// if the maximum length is reached, get off the loop
-			if (totalLength >= length) {
-				trimmed = true;
-				break;
-			}
-		}
-
-		for (String openTag : openTags) {
-			result += "</" + openTag + ">";
-		}
-		if (trimmed) {
-			result += suffix;
-		}
-		return result;
-	}
+        for (String openTag : openTags) {
+            result += "</" + openTag + ">";
+        }
+        if (trimmed) {
+            result += suffix;
+        }
+        return result;
+    }
 }

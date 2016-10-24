@@ -14,42 +14,45 @@ import javax.persistence.Table;
 import com.esoft.ischool.model.BaseEntity;
 
 @Entity
-@Table(name = "SESSION_HISTORY")
+@Table(name="SESSION_HISTORY")
 public class SessionHistory extends BaseEntity {
-
+	
 	@Id
 	@GeneratedValue(strategy = GenerationType.IDENTITY)
-	@Column(name = "SESSION_HISTORY_ID")
+	@Column(name="SESSION_HISTORY_ID")
 	private Long id;
 
+	//@NotNull
 	@ManyToOne
 	@JoinColumn(name = "USER_ID", nullable = true)
 	private User user;
 
-	@Column(name = "BEGIN_DATE")
+	@Column(name="BEGIN_DATE")
 	private Date beginDate;
 
-	@Column(name = "END_DATE")
+
+	@Column(name="END_DATE")
 	private Date endDate;
 
-	@Column(name = "SESSION_ID")
+	@Column(name="SESSION_ID")
 	private String sessionId;
 
-	@Column(name = "HOST_NAME")
+	@Column(name="HOST_NAME")
 	private String hostName;
-
-	@Column(name = "HOST_IP")
+	
+	@Column(name="HOST_IP")
 	private String hostIp;
-
-	@Column(name = "BROWSER")
+	
+	@Column(name="BROWSER")
 	private String browser;
-
-	@Column(name = "LANGUAGE")
+	
+	@Column(name="LANGUAGE")
 	private String language;
-
-	@Column(name = "OSUSER")
+	
+	@Column(name="OSUSER")
 	private String osuser;
 
+	
 	public String getOsuser() {
 		return osuser;
 	}
@@ -130,5 +133,6 @@ public class SessionHistory extends BaseEntity {
 	public void setId(Long id) {
 		this.id = id;
 	}
+
 
 }
