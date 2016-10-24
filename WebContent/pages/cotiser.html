@@ -1,0 +1,336 @@
+<div ng-include="'pages/menubg.html'"></div>
+
+<div class="bg-white" ng-controller="userCtrl">
+	<div class="container">
+		<div class="row">
+			<div class="item col-lg-9 col-md-6 col-xs-12">
+				<div class="page-section">
+					<div class="panel panel-default">
+						<span class="label label-primary">Cotisations et Depenses</span>
+						<div id="bar-example" class="height-150"></div>
+					</div>
+
+					<div class="panel panel-default">
+						<span class="label label-primary">Cotisations par membres</span>
+						<div id="contribution-bar" class="height-150"></div>
+					</div>
+					
+					<div id="exTab3" ng-show="theUser.canApprove">
+						<ul class="nav nav-pills">
+							<li class="active"><a href="#1b" data-toggle="tab">Cotisation</a></li>
+							<li><a href="#2b" data-toggle="tab">Depenses</a></li>
+						</ul>
+
+						<div class="tab-content clearfix">
+							<div class="tab-pane active" id="1b">
+								<div class="row">
+						<div class="col-xs-6 col-sm-6 col-md-6 col-lg-6">
+							<form ng-submit="userSearch()">
+								<div class="search-1">
+									<div class="input-group">
+										<span class="input-group-addon"><i class="icon-search"></i></span>
+										<input ng-model="searchCrit" type="text"
+											class="form-control form-control-w-250"
+											placeholder="Trouver un Lama dou...">
+									</div>
+								</div>
+
+							</form>
+						</div>
+					</div>
+								<div class="panel panel-default">
+									<!-- Data table -->
+									<table st-table="displayedCollection" st-safe-src="searchResults"
+										class="table table-striped" cellspacing="0" width="100%">
+										<thead>
+											
+											<tr>
+												<th>Nom</th>
+												<th>Prenom</th>
+												<th>E-mail</th>
+												<th>Position</th>
+												<th>Telephone</th>
+												<th>Ville de residence</th>
+												<th>Membre depuis</th>
+												<th ng-show="theUser.canApprove">Cotiser</th>
+
+											</tr>
+										</thead>
+										<tbody>
+											<tr ng-repeat="aUser in displayedCollection">
+												<td>::aUser.lastName::</pbtd>
+												<td>::aUser.firstName::</td>
+												<td><a ng-href="mailto: ::aUser.email::">::aUser.email::</a></td>
+												<td>::aUser.position.name::</td>
+												<td>::aUser.phone::</td>
+												<td>::aUser.city::</td>
+												<td>::aUser.createDate|date::</td>
+												<td>
+													<button ng-show="theUser.canApprove" type="button"
+														ng-click="showUserModal(aUser)" class="btn btn-success">
+														<i class="glyphicon glyphicon-ok"> </i>
+													</button>
+												</td>
+											</tr>
+
+										</tbody>
+										<tfoot>
+											<tr>
+												<td colspan="5" class="text-center">
+													<div st-pagination="" st-items-by-page="10"
+														st-displayed-pages="100"></div>
+												</td>
+											</tr>
+										</tfoot>
+									</table>
+									<!-- // Data table -->
+								</div>
+
+
+								<div id="myModal" class="modal fade" tabindex="-1" role="dialog"
+									aria-labelledby="myModalLabel" aria-hidden="true">
+									<div class="modal-dialog">
+										<div class="modal-content">
+											<div class="modal-header bg-info">
+												<button type="button" class="close" data-dismiss="modal"
+													aria-hidden="true">X</button>
+												<h1 id="myModalLabel" class="text-center"></h1>
+											</div>
+											<div class="modal-body">
+												<div class="container-fluid">
+													<div class="row">
+														<div class="col-xs-4 col-sm-2">
+															<img src="images/members/::currUser.id::.jpg"
+																alt="Pas d'image"
+																class="img-thumbnail img-responsive img-circle">
+														</div>
+													</div>
+													<hr>
+
+													<div class="row">
+
+														<div class="col-md-2">
+
+															<label for="theYear"> Annee </label> <select
+																name="theYear" id="theYear" ng-model="year">
+																<option ng-repeat="y in years" value="::y.name::">::y.name::</option>
+															</select>
+
+
+														</div>
+														<div class="col-md-2">
+
+															<label for="theMonth"> Mois </label> <select
+																name="theMonth" id="theMonth" ng-model="month">
+																<option ng-repeat="y in months" value="::y.name::">::y.name::</option>
+															</select>
+
+														</div>
+														<div class="col-md-4">
+
+															<label for="thePaymentType"> Type de payement </label> <select
+																name="thePaymentType" id="thePaymentType"
+																ng-model="paymentType">
+																<option ng-repeat="y in paymentTypes" value="::y.id::">::y.name::</option>
+															</select>
+														</div>
+														<div class="col-md-4">
+														</div>
+
+													</div>
+													<hr>
+													<div class="row">
+														<div class="form-group form-control-default">
+															<div class="input-group">
+																 
+																<input type="text" class="form-control"
+																	ng-model="amount" id="exampleInputAmount"
+																	placeholder="Montant">
+																<div class="input-group-addon">CFA</div>
+															</div>
+
+														</div>
+														<div class="form-group form-control-default">
+															<div class="input-group">
+																<div class="input-group-addon">Commentaire</div>
+																<input ng-model="comment" type="text"
+																	class="form-control" id="Comment"
+																	placeholder="Commentaire">
+															</div>
+														</div>
+													</div>
+													<div class="row">
+														<div class="alert alert-success"
+															ng-show="paymentSaved &&paymentSaveSubmitted">
+															<button type="button" class="close" data-dismiss="alert">
+																<span aria-hidden="true">&times;</span><span
+																	class="sr-only">Fermer</span>
+															</button>
+															::thePaymentMessage::
+														</div>
+														<div class="alert alert-danger"
+															ng-show="!paymentSaved &&paymentSaveSubmitted">
+															<button type="button" class="close" data-dismiss="alert">
+																<span aria-hidden="true">&times;</span><span
+																	class="sr-only">Fermer</span>
+															</button>
+															::thePaymentMessage::
+														</div>
+
+
+													</div>
+
+												</div>
+											</div>
+
+											<div class="modal-footer bg-info">
+												<button ng-click="clearPayment()" class="btn btn-danger"
+													data-dismiss="modal" aria-hidden="true">Fermer</button>
+												<button class="btn btn-success" ng-click="makeUserPayment()">Sauvegarder</button>
+											</div>
+										</div>
+									</div>
+								</div>
+								<!--/modal-->
+
+							</div>
+							<div class="tab-pane" id="2b">
+								<div class="row">
+
+									<div class="col-md-2">
+
+										<label for="theYear"> Annee </label> <select name="theYear"
+											id="theYear" ng-model="year">
+											<option ng-repeat="y in years" value="::y.name::">::y.name::</option>
+										</select>
+									</div>
+									<div class="col-md-3">
+
+										<label for="theMonth"> Mois </label> <select name="theMonth"
+											id="theMonth" ng-model="month">
+											<option ng-repeat="y in months" value="::y.name::">::y.name::</option>
+										</select>
+
+									</div>
+									<div class="col-md-4">
+
+										<label for="theExpenseType"> Raison de la depense </label> <select
+											name="theExpenseType" id="theExpenseType"
+											ng-model="expenseType">
+											<option ng-repeat="y in expenseTypes" value="::y.id::">::y.name::</option>
+										</select>
+									</div>
+
+								</div>
+								<div class="row">
+									<div class="form-group form-control-default">
+										<div class="input-group">
+											
+											<input type="text" class="form-control" ng-model="amount"
+												id="exampleInputAmount" placeholder="Montant">
+											<div class="input-group-addon">CFA</div>
+										</div>
+
+									</div>
+									<div class="form-group form-control-default">
+										<div class="input-group">
+											<div class="input-group-addon">Commentaire</div>
+											<input ng-model="comment" type="text" class="form-control"
+												id="Comment" placeholder="Commentaire">
+										</div>
+									</div>
+								</div>
+								<div class="row">
+									<div class="alert alert-success"
+										ng-show="paymentSaved &&paymentSaveSubmitted">
+										<button type="button" class="close" data-dismiss="alert">
+											<span aria-hidden="true">&times;</span><span class="sr-only">Fermer</span>
+										</button>
+										::thePaymentMessage::
+									</div>
+									<div class="alert alert-danger"
+										ng-show="!paymentSaved &&paymentSaveSubmitted">
+										<button type="button" class="close" data-dismiss="alert">
+											<span aria-hidden="true">&times;</span><span class="sr-only">Fermer</span>
+										</button>
+										::thePaymentMessage::
+									</div>
+
+
+								</div>
+								<button type="submit" ng-click="clearExpense()"
+									class="btn btn-danger">Effacer</button>
+								<button type="submit" class="btn btn-success"
+									ng-click="saveExpense()">Sauvegarder</button>
+
+								<hr>
+
+								<div class="panel panel-default">
+									<!-- Data table -->
+									<table st-table="rowCollection" st-safe-src="expenses"
+										class="table table-striped" cellspacing="0" width="100%">
+										<thead>
+											<tr>
+
+												<th colspan="5"><input st-search
+													placeholder="Rechercher une depense"
+													class="input-sm form-control" type="search" /></th>
+											</tr>
+											<tr>
+												<th>Annee</th>
+												<th>Mois</th>
+												<th>Montant</th>
+												<th>Raison</th>
+												<th>Commentaire</th>
+												<th ng-show="theUser.canApprove">Supprimer</th>
+
+											</tr>
+										</thead>
+										<tbody>
+											<tr ng-repeat="exp in rowCollection">
+												<td>::exp.year::</pbtd>
+												<td>::exp.month::</td>
+												<td>::exp.amount::</td>
+												<td>::exp.paymentType.name::</td>
+												<td>::exp.comment::</td>
+												<td>
+													<button ng-show="theUser.canApprove" type="button"
+														ng-click="deleteExpense(exp)" class="btn btn-danger">
+														<i class="glyphicon glyphicon-remove-circle"> </i>
+													</button>
+												</td>
+											</tr>
+
+										</tbody>
+										<tfoot>
+											<tr>
+												<td colspan="5" class="text-center">
+													<div st-pagination="" st-items-by-page="5"
+														st-displayed-pages="100"></div>
+												</td>
+											</tr>
+										</tfoot>
+									</table>
+									<!-- // Data table -->
+								</div>
+
+							</div>
+
+						</div>
+					</div>
+
+				</div>
+
+			</div>
+			<div class="item col-lg-3 col-md-6 col-xs-12">
+				<div class="page-section">
+					<div ng-include="'pages/sidebar.html'"></div>
+				</div>
+			</div>
+		</div>
+		<br />
+	</div>
+
+</div>
+<!-- // END #content -->
+

@@ -1,0 +1,45 @@
+<div ng-include="'pages/menubg.html'"></div>
+
+<div class="bg-white" >
+
+	<div class="container">
+
+		<div class="row">
+			<div class="item col-lg-9 col-md-6 col-xs-12" ng-controller="eventCtrl">
+				<h2>::theEvent.title::</h2>
+
+				<div class="panel panel-default">
+					<div class="carousel-preview">
+						<div class="owl-carousel owl-thumb" data-sync="#owl-preview-1"
+							id="owl-thumb-1">
+							<div class="item text-center" ng-repeat="pic in EventPictures">
+								<img src="images/events/::theEvent.id::/::pic::" alt="" />
+							</div>
+						</div>
+						  
+						<div class="owl-carousel owl-preview" data-sync="#owl-thumb-1"
+							id="owl-preview-1">
+							<div class="item" ng-repeat="pic in EventPictures">
+								<img src="images/events/::theEvent.id::/::pic::" alt="" />
+							</div>
+						</div>
+						 
+					</div>
+				</div>
+
+			</div>
+			<div class="item col-lg-3 col-md-6 col-xs-12">
+				<div class="page-section">
+					<div ng-include="'pages/sidebar.html'"></div>
+				</div>
+			</div>
+		</div>
+	</div>
+	<br />
+</div>
+<!-- // END .bg-white -->
+
+
+
+<!-- // END #content -->
+

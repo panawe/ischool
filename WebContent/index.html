@@ -1,0 +1,432 @@
+<!DOCTYPE html>
+<html lang="en" ng-app="app"
+	class="st-layout ls-top-navbar ls-bottom-footer show-sidebar sidebar-l2">
+
+<head>
+
+<meta http-equiv="Content-Type" content="text/html; charset=UTF-8">
+<meta http-equiv="X-UA-Compatible" content="IE=edge">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<meta name="description" content="">
+<meta name="author" content="">
+<title>iSchool</title>
+<!-- my Custom script comes here me -->
+<link href="css/vendor/all.css" rel="stylesheet">
+<link href="css/app/app.css" rel="stylesheet">
+<link href="css/app/tree.css" rel="stylesheet">
+<link href="js/vendor/textAngular/textAngular.css" rel="stylesheet">
+<link
+	href="js/vendor/calendar-master/css/angular-bootstrap-calendar.min.css"
+	rel="stylesheet">
+
+</head>
+
+<body>
+
+	<div class="st-container">
+
+		<!-- Fixed navbar -->
+		<div ng-controller="userCtrl"
+			class="navbar navbar-main navbar-skin-cover navbar-static-top navbar-absolute-top navbar-size-large"
+			role="navigation">
+			<div class="container-fluid">
+				<div class="navbar-header">
+					<button type="button" class="navbar-toggle collapsed"
+						data-toggle="collapse" data-target="#main-nav">
+						<span class="sr-only">Toggle navigation</span> <span
+							class="icon-bar"></span> <span class="icon-bar"></span> <span
+							class="icon-bar"></span>
+					</button>
+					<a class="navbar-brand" href="#/"><img src="images/logo.png"
+						alt="" height="75%" /></a>
+				</div>
+
+				<!-- Collect the nav links, forms, and other content for toggling -->
+				<div class="collapse navbar-collapse" id="main-nav">
+					<ul class="nav navbar-nav">
+						<li>
+
+							<div class="dropdown" style="padding: 15px;">
+								<button class="btn btn-primary dropdown-toggle" type="button"
+									data-toggle="dropdown"
+									style="background-color: #337ab7; font-size: 1.6rem;">
+									Dossier<span class="caret"></span>
+								</button>
+								<ul class="dropdown-menu">
+									<li><a href="#">Enseignant</a></li>
+									<li><a href="#">Eleve</a></li>
+									<li><a href="#">Inscription</a></li>
+								</ul>
+							</div>
+
+						</li>
+
+						<li>
+							<div class="dropdown" style="padding: 15px;">
+								<button class="btn btn-primary dropdown-toggle" type="button"
+									data-toggle="dropdown"
+									style="background-color: #337ab7; font-size: 1.6rem;">
+									Evaluation<span class="caret"></span>
+								</button>
+								<ul class="dropdown-menu">
+									<li><a href="#">Menu 1</a></li>
+									<li><a href="#">Menu 2</a></li>
+									<li><a href="#">Menu 3</a></li>
+								</ul>
+							</div>
+						</li>
+
+						<li><div class="dropdown" style="padding: 15px;">
+								<button class="btn btn-primary dropdown-toggle" type="button"
+									data-toggle="dropdown"
+									style="background-color: #337ab7; font-size: 1.6rem;">
+									Bulletins<span class="caret"></span>
+								</button>
+								<ul class="dropdown-menu">
+									<li>
+										<div class="row" style="width: 400px;">
+										
+											<ul class="nav col-md-6">
+												<li><a href="#">test Menu 1-1 </a></li>
+												<li><a href="#">test Menu 1-2</a></li>
+												<li><a href="#">test Menu 1-3</a></li>
+											</ul>
+											<ul class="nav col-md-6">
+												<li><a href="#">test Menu 2-1</a></li>
+												<li><a href="#">test Menu 2-2</a></li>
+												<li><a href="#">test Menu 2-3</a></li>
+											</ul>
+										</div>
+									</li>
+								</ul>
+							</div></li>
+
+
+
+					</ul>
+					<form class="navbar-form navbar-left margin-none"
+						ng-submit="findMembers()">
+						<div class="search-1">
+							<div class="input-group">
+								<span class="input-group-addon"><i class="icon-search"></i></span>
+								<input ng-model="searchText" type="text"
+									class="form-control form-control-w-250"
+									placeholder="Chercher un eleve...">
+							</div>
+						</div>
+					</form>
+					<ul class="nav navbar-nav navbar-right">
+						<li class="hidden-xs"><a href="#sidebar-chat"
+							data-toggle="sidebar-menu"> <i class="fa fa-users"></i> <span
+								ng-controller="refreshCtrl" class="badge badge-primary">::guestCount::</span>
+						</a></li>
+						<!-- Login -->
+
+						<li class="dropdown" ng-show="!theUser.id>0" ng-cloak><a
+							href="#" class="dropdown-toggle" data-toggle="dropdown"> <i
+								class="fa fa-fw fa-lock"></i> Connexion
+						</a>
+							<div class="dropdown-menu dropdown-size-280">
+								<form role="form" ng-submit="login()">
+									<div class="alert alert-danger" ng-show="failedLogin">
+										<button type="button" class="close" data-dismiss="alert">
+											<span aria-hidden="true">&times;</span><span class="sr-only">Close</span>
+										</button>
+										Nom d'utilisateur/mot de passe invalide.
+									</div>
+									<div class="form-group">
+										<div class="input-group">
+											<span class="input-group-addon"><i class="fa fa-user"></i></span>
+											<input type="txt" class="form-control"
+												placeholder="Address E-mail" ng-model="userName">
+										</div>
+									</div>
+									<div class="form-group">
+										<div class="input-group">
+											<span class="input-group-addon"><i
+												class="fa fa-shield"></i></span> <input type="password"
+												class="form-control" placeholder="Mot de passe"
+												ng-model="password">
+										</div>
+									</div>
+
+									<div class="text-right">
+										<button type="submit" class="btn btn-primary">
+											Connexion <i class="fa fa-sign-in"></i>
+										</button>
+									</div>
+								</form>
+							</div></li>
+
+
+						<!-- // END login -->
+						<!-- Sign up -->
+						<li class="dropdown" ng-show="!theUser.id>0" ng-cloak><a
+							href="#" class="dropdown-toggle" data-toggle="dropdown"> <i
+								class="fa fa-fw fa-plus"></i> Creer un compte
+						</a>
+							<div class="dropdown-menu dropdown-size-280">
+								<form role="form" ng-submit="createUser()">
+									<div class="row">
+										<div class="col-md-6">
+											<div class="form-group form-control-default required">
+												<label for="userName">Nom d'utilisateur</label> <input
+													ng-model="newUser.userName" type="text"
+													class="form-control" id="userName"
+													placeholder="Nom d'utilisateur">
+											</div>
+										</div>
+										<div class="col-md-6">
+											<div class="form-group form-control-default required">
+												<label for="cityOrigin">Ville de residence</label> <input
+													ng-model="newUser.cityOrigin" type="text"
+													class="form-control" id="cityOrigin"
+													placeholder="Ville/Village d'origine">
+											</div>
+										</div>
+									</div>
+									<div class="row">
+										<div class="col-md-6">
+											<div class="form-group form-control-default required">
+												<label for="exampleInputFirstName">Prenom</label> <input
+													ng-model="newUser.firstName" type="text"
+													class="form-control" id="exampleInputFirstName"
+													placeholder="Prenom">
+											</div>
+										</div>
+										<div class="col-md-6">
+											<div class="form-group form-control-default required">
+												<label for="exampleInputLastName">Nom</label> <input
+													ng-model="newUser.lastName" type="text"
+													class="form-control" id="exampleInputLastName"
+													placeholder="Nom">
+											</div>
+										</div>
+									</div>
+									<div class="row">
+										<div class="form-group form-control-default required">
+											<label for="exampleInputEmail1">Addresse Email</label> <input
+												ng-model="newUser.email" type="email" class="form-control"
+												id="exampleInputEmail1" placeholder="Email">
+										</div>
+									</div>
+									<div class="row">
+										<div class="col-md-6">
+											<div class="form-group form-control-default required">
+												<label for="exampleInputPassword1">Mot de passe</label> <input
+													ng-model="newUser.password" type="password"
+													class="form-control" id="exampleInputPassword1"
+													placeholder="Mot de passe">
+											</div>
+										</div>
+										<div class="col-md-6">
+											<div class="form-group form-control-default required">
+												<label for="sex">Sex:</label> <select name="selectSex"
+													class="form-control" ng-model="newUser.sex" data-size="2">
+													<option value="M">Homme</option>
+													<option value="F">Femme</option>
+												</select>
+											</div>
+										</div>
+									</div>
+									<button type="submit" class="btn btn-primary">Enregistrer</button>
+									<div class="alert alert-danger" ng-show="failedLogin">
+										<button type="button" class="close" data-dismiss="alert">
+											<span aria-hidden="true">&times;</span><span class="sr-only">Fermer</span>
+										</button>
+										::theUserMessage::
+									</div>
+								</form>
+							</div></li>
+
+						<!-- // END sign up -->
+						<!-- user -->
+
+						<li class="dropdown user" ng-show="theUser.id>0" ng-cloak><a
+							href="#" class="dropdown-toggle" data-toggle="dropdown"> <img
+								src="images/members/::theUser.id::.jpg" alt=""
+								class="img-circle" />::theUser.firstName +'
+								'+theUser.lastName::<span class="caret"></span>
+						</a>
+							<ul class="dropdown-menu" role="menu" ng-show="theUser.id>0">
+								<li><a href="#pages/profile"><i class="fa fa-user"></i>Profile</a></li>
+								<li ng-show="theUser.canApprove && theUser.status==1"><a
+									href="#pages/events"><i class="fa fa-wrench"></i>Evenement</a></li>
+								<li ng-show="theUser.status==1"><a href="#pages/email"><i
+										class="fa fa-wrench"></i>Nouvelles</a></li>
+								<li ng-show="theUser.canApprove && theUser.status==1"><a
+									href="#pages/approveMembers"><i class="fa fa-wrench"></i>Administrer
+										les Membres</a></li>
+								<li ng-show="theUser.status==1"><a href="#pages/cotiser"><i
+										class="fa fa-wrench"></i>Cotisation</a></li>
+								<li ng-show="theUser.canApprove && theUser.status==1"><a
+									href="#pages/projects"><i class="fa fa-wrench"></i>Projets</a></li>
+								<li ng-show="theUser.canApprove && theUser.status==1"><a
+									href="#pages/sponsors"><i class="fa fa-wrench"></i>Sponsors</a></li>
+								<li ng-show="theUser.canApprove && theUser.status==1"><a
+									href="#pages/announces"><i class="fa fa-wrench"></i>Annonces</a></li>
+								<li ng-show="theUser.canApprove && theUser.status==1"><a
+									href="#pages/weblinks"><i class="fa fa-wrench"></i>Liens</a></li>
+								<li><a href="#/" ng-click="logout()"><i
+										class="fa fa-sign-out"></i>Deconnexion</a></li>
+							</ul></li>
+
+						<!-- // END user -->
+
+
+					</ul>
+				</div>
+				<!-- /.navbar-collapse -->
+
+			</div>
+
+
+		</div>
+
+		<div class="row">
+
+
+			<div ui-view class="ui-view-main"></div>
+
+
+
+		</div>
+		<!-- Footer -->
+
+		<!-- Sidebar component with st-effect-1 (set on the toggle button within the navbar) -->
+		<div ng-controller="refreshCtrl"
+			class="sidebar sidebar-chat right sidebar-size-2 sidebar-offset-0 chat-skin-white"
+			id=sidebar-chat>
+			<div class="split-vertical">
+				<div class="chat-search">
+					<input type="text" class="form-control" placeholder="Search" />
+				</div>
+
+				<div class="split-vertical-body">
+					<div class="split-vertical-cell">
+						<div data-scrollable>
+							<ul class="chat-contacts">
+								<li class="online" data-user-id="1"
+									ng-repeat="onlineMember in onlineMembers"><a href="#">
+										<div class="media">
+											<div class="pull-left">
+												<span class="status"></span> <img
+													src="images/members/::onlineMember.id::.jpg" width="40"
+													class="img-circle" />
+											</div>
+											<div class="media-body">
+												<div class="contact-name">::onlineMember.firstName::
+													::onlineMember.lastName::</div>
+											</div>
+										</div>
+								</a></li>
+							</ul>
+
+						</div>
+					</div>
+				</div>
+			</div>
+		</div>
+		<br /> <br />
+		<footer class="footer"
+			style="background-image: url('images/green-waves.png'); background-size: 100% 100%; background-color: #f7f7f7; height: 100px; padding: 8px">
+			<div ng-include="'pages/footer.html'">
+		</footer>
+		<!-- // Footer -->
+	</div>
+	<!-- Inline Script for colors and config objects; used by various external scripts; -->
+	<script>
+		var colors = {
+			"danger-color" : "#e74c3c",
+			"success-color" : "#81b53e",
+			"warning-color" : "#f0ad4e",
+			"inverse-color" : "#2c3e50",
+			"info-color" : "#2d7cb5",
+			"default-color" : "#6e7882",
+			"default-light-color" : "#cfd9db",
+			"purple-color" : "#9D8AC7",
+			"mustard-color" : "#d4d171",
+			"lightred-color" : "#e15258",
+			"body-bg" : "#f6f6f6"
+		};
+		var config = {
+			theme : "real-estate",
+			skins : {
+				"default" : {
+					"primary-color" : "#3498db"
+				}
+			}
+		};
+
+		var openInNewTab = function(link) {
+			$window.open(link, '_blank');
+		};
+	</script>
+	<script src="js/vendor/all.js"></script>
+	<!-- Vendor Scripts Standalone Libraries -->
+	<!-- 
+ <script src="js/vendor/core/all.js"></script> 
+ <script src="js/vendor/core/jquery.js"></script> 
+ <script src="js/vendor/core/bootstrap.js"></script> 
+ <script src="js/vendor/core/breakpoints.js"></script> 
+ <script src="js/vendor/core/jquery.nicescroll.js"></script> 
+ <script src="js/vendor/core/isotope.pkgd.js"></script> 
+ <script src="js/vendor/core/packery-mode.pkgd.js"></script> 
+ <script src="js/vendor/core/jquery.grid-a-licious.js"></script> 
+ <script src="js/vendor/core/jquery.cookie.js"></script> 
+ <script src="js/vendor/core/jquery-ui.custom.js"></script> 
+ <script src="js/vendor/core/jquery.hotkeys.js"></script> 
+ <script src="js/vendor/core/handlebars.js"></script> 
+ <script src="js/vendor/core/jquery.hotkeys.js"></script> 
+ <script src="js/vendor/core/load_image.js"></script> 
+ <script src="js/vendor/core/jquery.debouncedresize.js"></script> 
+ <script src="js/vendor/tables/all.js"></script> 
+ <script src="js/vendor/forms/all.js"></script> 
+ <script src="js/vendor/media/all.js"></script>
+ -->
+	<!--script src="js/vendor/player/all.js"></script-->
+	<!--  
+ <script src="js/vendor/charts/all.js"></script> 
+ <script src="js/vendor/charts/flot/all.js"></script> 
+ <script src="js/vendor/charts/easy-pie/jquery.easypiechart.js"></script> 
+ <script src="js/vendor/charts/morris/all.js"></script> 
+ <script src="js/vendor/charts/sparkline/all.js"></script> 
+ <script src="js/vendor/maps/vector/all.js"></script> 
+ <script src="js/vendor/tree/jquery.fancytree-all.js"></script> 
+ <script src="js/vendor/nestable/jquery.nestable.js"></script> 
+ <script src="js/vendor/angular/angular.js"></script>   
+    <script src="js/vendor/angular/angular-resource.js"></script>   
+    <script src="js/vendor/angular/angular-sanitize.js"></script>   
+    <script src="js/vendor/angular/angular-ui-router.js"></script>   
+    <script src="js/vendor/angular/angular-touch.js"></script>  
+    <script src="js/vendor/angular/ui-utils.js"></script>  
+    -->
+	<script src="js/vendor/angular/angular-cookies.min.js"></script>
+	<script src="js/vendor/smartDataTable/smart-table.min.js"></script>
+	<script src="js/vendor/fileupload/angular-file-upload.min.js"></script>
+	<script src="js/vendor/textAngular/textAngular-rangy.min.js"></script>
+	<script src="js/vendor/textAngular/textAngular-sanitize.min.js"></script>
+	<script src="js/vendor/textAngular/textAngular.min.js"></script>
+	<!-- Start - These imports are for the calendar -->
+	<script
+		src="js/vendor/calendar-master/js/angular-bootstrap-calendar-tpls.min.js"></script>
+	<script src="js/vendor/calendar-master/js/moment.js"></script>
+	<script
+		src="js/vendor/calendar-master/js/ui-bootstrap-tpls-0.14.3.min.js"></script>
+	<script src="js/vendor/calendar-master/js/angular-animate.min.js"></script>
+	<!-- End - These imports are for the calendar -->
+	<script src="js/app/app.js"></script>
+	<!-- Controllers -->
+	<script src="js/app/custom/userController.js"></script>
+	<script src="js/app/custom/eventController.js"></script>
+	<script src="js/app/custom/projectController.js"></script>
+	<script src="js/app/custom/refreshController.js"></script>
+	<script src="js/app/custom/sidebarController.js"></script>
+	<script src="js/app/custom/sponsorController.js"></script>
+	<script src="js/app/custom/announceController.js"></script>
+	<script src="js/app/custom/weblinkController.js"></script>
+	<script src="js/app/custom/directives.js"></script>
+
+</body>
+
+</html>

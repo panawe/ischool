@@ -1,0 +1,177 @@
+<div ng-include="'pages/menubg.html'"></div>
+<div class="bg-white" ng-controller="announceCtrl">
+	<div class="container">
+		<div class="row">
+			<div class="item col-lg-9 col-md-6 col-xs-12">
+				<div class="page-section">
+
+					<div class="container">
+						<h2>Les Announces</h2>
+					</div>
+					<div id="exTab3" class="container">
+						<ul class="nav nav-pills">
+							<li class="active"><a href="#1b" data-toggle="tab">Ajouter
+									une announce</a></li>
+							<li><a href="#2b" ng-click="getAllAnnounces()"
+								data-toggle="tab">Les announces</a></li>						
+						</ul>
+
+						<div class="tab-content clearfix">
+							<div class="tab-pane active" id="1b">
+								<div class="alert alert-danger"
+									ng-show="!announceSaved && announceSaveSubmitted">
+									<button type="button" class="close" data-dismiss="alert">
+										<span aria-hidden="true">&times;</span><span class="sr-only">Fermer</span>
+									</button>
+									::theAnnounceMessage::
+								</div>
+
+								<div class="alert alert-success"
+									ng-show="announceSaved && announceSaveSubmitted">
+									<button type="button" class="close" data-dismiss="alert">
+										<span aria-hidden="true">&times;</span><span class="sr-only">Fermer</span>
+									</button>
+									::theAnnounceMessage::
+								</div>
+
+								<form role="form">							
+									<div class="row">
+										<div class="col-md-6">
+											<div class="form-group form-control-default">
+												<label for="announceTitle">Title:</label> <input
+													ng-model="theAnnounce.title" type="text" id="announceTitle"
+													class="form-control" placeholder="announceTitle">
+											</div>
+										</div>
+										<div class="col-md-6">
+											<div class="form-group form-control-default">
+												<label for="announceDescription">Description</label>
+												<textarea rows="4" cols="50" ng-model="theAnnounce.description"
+													type="text" class="form-control" id="announceDescription"
+													placeholder="Description" />
+											</div>
+										</div>
+									</div>
+									
+									<div class="row">
+										<div class="col-md-6">
+											<div class="form-group margin-none">
+												<label for="beginDate">Date de Debut</label> <input
+													id="startDate" ng-model="theAnnounce.beginDate" type="text"
+													class="form-control datepicker">
+											</div>
+										</div>
+										<div class="col-md-6">
+											<div class="form-group margin-none">
+												<label for="endDate">Date de Fin</label> <input id="endDate"
+													ng-model="theAnnounce.endDate" type="text"
+													class="form-control datepicker">
+											</div>
+										</div>
+									</div>
+									
+									<div class="row">
+										<div class="col-md-6">
+											<div class="form-group">
+												<label for="status">Etat</label> <select
+													name="select" class="form-control"
+													ng-model="theAnnounce.status" data-style="btn-white"
+													data-size="5">
+													<option value="0">Active</option>
+													<option value="1">Desactive</option>
+												</select>
+											</div>
+										</div>
+									</div>
+										
+									<button ng-click="createAnnounce()" type="submit"
+										class="btn btn-primary">Enregistrer</button>
+				
+									&nbsp;&nbsp;&nbsp;
+									<button ng-click="clearAnnounce()" type="submit"
+										class="btn btn-danger">Effacer</button>
+								</form>
+							</div>
+							
+							<div class="tab-pane" id="2b">
+								<h1 class="page-section-heading">Les announces</h1>
+								<div class="panel panel-default">
+									<!-- Data table -->
+									<table st-table="displayedCollection" st-safe-src="announces"
+										class="table table-striped" cellspacing="0" width="100%">
+										<thead>
+											<tr>
+				
+												<th colspan="5"><input st-search
+													placeholder="Rechercher une announce"
+													class="input-sm form-control" type="search" />
+												</th>
+											</tr>
+											<tr>
+												<th>Title</th>
+												<th>Description</th>
+												<th>Debut</th>
+												<th>Fin</th>
+												<th>Status</th>
+												<th ng-show="theUser.canApprove">Supprimer</th>
+												<th ng-show="theUser.canApprove">Selectionner</th>
+				
+											</tr>
+										</thead>
+										<tbody>
+											<tr ng-repeat="aAnnounce in displayedCollection"
+												ng-show="!aAnnounce.deleted">
+												<td>::aAnnounce.title::</td>
+												<td>::aAnnounce.description::</td>
+												<td>::aAnnounce.beginDate::</td>
+												<td>::aAnnounce.endDate::</td>
+												<td>::aAnnounce.statusDescription::</td>
+												<td>
+													<button ng-show="theUser.canApprove" type="button"
+														ng-click="deleteAnnounce(aAnnounce)"
+														class="btn btn-sm btn-danger">
+														<i class="glyphicon glyphicon-remove-circle"> </i>
+													</button>
+												</td>
+												<td>
+													<button ng-show="theUser.canApprove" type="button"
+														ng-click="selectAnnounce(aAnnounce)" class="btn btn-success">
+														<i class="glyphicon glyphicon-ok"> </i>
+													</button>
+												</td>
+											</tr>
+				
+										</tbody>
+										<tfoot>
+											<tr>
+												<td colspan="7" class="text-center">
+													<div st-pagination="" st-items-by-page="7"
+														st-displayed-pages="100"></div>
+												</td>
+											</tr>
+										</tfoot>
+									</table>
+									<!-- // Data table -->
+								</div>
+							</div>
+						</div>
+						<!--  End of announce -->
+					</div>
+				</div>
+			</div>
+			<div class="item col-lg-3 col-md-6 col-xs-12">
+				<div class="page-section">
+					<div ng-include="'pages/sidebar.html'"></div>
+				</div>
+			</div>
+		</div>
+
+
+
+	</div>
+
+
+	<br />
+
+</div>
+<!-- // END .bg-white -->

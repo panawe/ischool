@@ -1,0 +1,1023 @@
+<div ng-include="'pages/menubg.html'"></div>
+<div class="bg-white" ng-controller="userCtrl">
+	<div class="container">
+		<div class="row">
+			<div class="item col-lg-9 col-md-6 col-xs-12">
+				<div class="page-section">
+					<div class="row">
+						<div class="col-xs-6 col-sm-6 col-md-6 col-lg-6">
+							<form ng-submit="userSearch()">
+								<div class="search-1">
+									<div class="input-group">
+										<span class="input-group-addon"><i class="icon-search"></i></span>
+										<input ng-model="searchCrit" type="text"
+											class="form-control form-control-w-250"
+											placeholder="Trouver un Lamabouéen...">
+									</div>
+								</div>
+
+							</form>
+						</div>
+					</div>
+					<div class="row">
+						<div class="col-xs-12 col-sm-12 col-md-12 col-lg-12">
+							<div class="panel panel-default">
+								<!-- Data table -->
+								<table st-table="displayedCollection1"
+									st-safe-src="searchResults" class="table table-striped"
+									cellspacing="0" width="100%">
+									<thead>
+										<tr>
+											<th>Nom</th>
+											<th>Prenom</th>
+											<th>E-mail</th>
+											<th>Position</th>
+
+											<th>Ville de residence</th>
+											<th>Pays de residence</th>
+											<th ng-show="theUser.canApprove">Rejeter</th>
+											<th ng-show="theUser.canApprove">Approver</th>
+											<th ng-show="theUser.canApprove">Selectionner</th>
+
+										</tr>
+									</thead>
+									<tbody>
+										<tr ng-repeat="aUser in displayedCollection1">
+											<td>::aUser.lastName::</pbtd>
+											<td>::aUser.firstName::</td>
+											<td><a ng-href="mailto: ::aUser.email::">::aUser.email::</a></td>
+											<td>::aUser.position.name::</td>
+											<td>::aUser.cityResidence::</td>
+											<td>::aUser.countryResidence.name::</td>
+											<td>
+												<button
+													ng-show="theUser.canApprove && aUser.status!=1 && aUser.status!=2"
+													type="button" ng-click="rejectMember(aUser)"
+													class="btn btn-sm btn-danger">
+													<i class="glyphicon glyphicon-remove-circle"> </i>
+												</button>
+											</td>
+											<td>
+												<button ng-show="theUser.canApprove && aUser.status!=1"
+													type="button" ng-click="approveMember(aUser)"
+													class="btn btn-success">
+													<i class="glyphicon glyphicon-ok"> </i>
+												</button>
+											</td>
+											<td>
+												<button ng-show="theUser.canApprove" type="button"
+													ng-click="setCurrent(aUser)" class="btn btn-warning">
+													<i class="glyphicon glyphicon-ok"> </i>
+												</button>
+											</td>
+										</tr>
+
+									</tbody>
+									<tfoot>
+										<tr>
+											<td colspan="5" class="text-center">
+												<div st-pagination="" st-items-by-page="5"
+													st-displayed-pages="100"></div>
+											</td>
+										</tr>
+									</tfoot>
+								</table>
+								<!-- // Data table -->
+							</div>
+						</div>
+					</div>
+
+				</div>
+
+				<div class="page-section">
+					<div class="row">
+						<div class="col-xs-12 col-sm-12 col-md-12 col-lg-12">
+
+							<button ng-click="resetUserMessage();clearUser();" type="submit"
+								ng-show="theUser.canApprove" class="btn btn-warning">Ajouter
+								un nouveau Membre</button>
+
+							<h5 class="text-justify">::currUser.firstName+'
+								'+currUser.lastName::</h5>
+
+
+
+							<div id="exTab3">
+								<ul class="nav nav-pills">
+									<li class="active"><a href="#1b" data-toggle="tab"
+										ng-click="resetUserMessage()">Information Generale</a></li>
+									<li><a href="#2c" data-toggle="tab"
+										ng-click="resetUserMessage(); refreshTree(currUser);">Famille</a></li>
+									<li><a href="#3b" data-toggle="tab">Changer l'image du
+											profile</a></li>
+
+								</ul>
+
+								<div class="tab-content clearfix">
+									<div class="tab-pane active" id="1b">
+										<form role="form">
+											<div class="row">
+												<div class="col-xs-4 col-sm-2">
+													<img src="images/members/::currUser.id::.jpg"
+														alt="Pas d'image"
+														class="img-thumbnail img-responsive img-circle" />
+												</div>
+											</div>
+											<div class="row">
+												<div class="col-md-6">
+													<div class="form-group form-control-default required">
+														<label for="firstName">Prenom:</label> <input
+															ng-model="currUser.firstName" type="text"
+															class="form-control" id="firstName" placeholder="Prenom">
+													</div>
+												</div>
+												<div class="col-md-6">
+													<div class="form-group form-control-default required">
+														<label for="lastName">Nom:</label> <input
+															ng-model="currUser.lastName" type="text"
+															class="form-control" id="lastName" placeholder="Nom">
+													</div>
+												</div>
+											</div>
+											<div class="row">
+												<div class="col-md-6">
+													<div class="form-group form-control-default required">
+														<label for="cityResi">Ville de residence:</label> <input
+															ng-model="currUser.cityResidence" type="text"
+															class="form-control" id="city"
+															placeholder="Ville de residence">
+													</div>
+												</div>
+												<div class="col-md-6">
+													<div class="form-group form-control-default required">
+														<label for="CountryResidence">Pays de residence:</label> <select
+															name="CountryResidence" class="form-control"
+															ng-model="currUser.countryResidence.id" data-size="231">
+															<option value="215">Togo</option>
+															<option value="68">France</option>
+															<option value="64">Etats-Unis</option>
+															<option value="23">Belgique</option>
+															<option value="1">Afghanistan</option>
+															<option value="2">Afrique du Sud</option>
+															<option value="3">Albanie</option>
+															<option value="4">Algerie</option>
+															<option value="5">Allemagne</option>
+															<option value="6">Andorre</option>
+															<option value="7">Angola</option>
+															<option value="8">Anguilla</option>
+															<option value="9">Antigua-et-Barbuda</option>
+															<option value="10">Antilles neerlandaises</option>
+															<option value="11">Arabie saoudite</option>
+															<option value="12">Argentine</option>
+															<option value="13">Armenie</option>
+															<option value="14">Aruba</option>
+															<option value="15">Australie</option>
+															<option value="16">Autriche</option>
+															<option value="17">Azerbaidjan</option>
+															<option value="18">Bahamas</option>
+															<option value="19">Bahrein</option>
+															<option value="20">Bangladesh</option>
+															<option value="21">Barbade</option>
+															<option value="22">Belau</option>
+															<option value="24">Belize</option>
+															<option value="25">Benin</option>
+															<option value="26">Bermudes</option>
+															<option value="27">Bhoutan</option>
+															<option value="28">Bielorussie</option>
+															<option value="29">Birmanie</option>
+															<option value="30">Bolivie</option>
+															<option value="31">Bosnie-Herzegovine</option>
+															<option value="32">Botswana</option>
+															<option value="33">Bresil</option>
+															<option value="34">Brunei</option>
+															<option value="35">Bulgarie</option>
+															<option value="36">Burkina Faso</option>
+															<option value="37">Burundi</option>
+															<option value="38">Cambodge</option>
+															<option value="39">Cameroun</option>
+															<option value="40">Canada</option>
+															<option value="41">Cap-Vert</option>
+															<option value="42">Chili</option>
+															<option value="43">Chine</option>
+															<option value="44">Chypre</option>
+															<option value="45">Colombie</option>
+															<option value="46">Comores</option>
+															<option value="47">Congo</option>
+															<option value="48">Congo (Republique
+																democratique du )</option>
+															<option value="49">Coree du Nord</option>
+															<option value="50">Coree du Sud</option>
+															<option value="51">Costa Rica</option>
+															<option value="52">Cote d''Ivoire</option>
+															<option value="53">Croatie</option>
+															<option value="54">Cuba</option>
+															<option value="55">Danemark</option>
+															<option value="56">Djibouti</option>
+															<option value="57">Dominique</option>
+															<option value="58">egypte</option>
+															<option value="59">emirats arabes unis</option>
+															<option value="60">equateur</option>
+															<option value="61">erythree</option>
+															<option value="62">Espagne</option>
+															<option value="63">Estonie</option>
+															<option value="65">ethiopie</option>
+															<option value="66">Fidji</option>
+															<option value="67">Finlande</option>
+															<option value="69">Gabon</option>
+															<option value="70">Gambie</option>
+															<option value="71">Georgie</option>
+															<option value="72">Ghana</option>
+															<option value="73">Gibraltar</option>
+															<option value="74">Grece</option>
+															<option value="75">Grenade</option>
+															<option value="76">Groenland</option>
+															<option value="77">Guadeloupe</option>
+															<option value="78">Guam</option>
+															<option value="79">Guatemala</option>
+															<option value="80">Guinee</option>
+															<option value="81">Guinee equatoriale</option>
+															<option value="82">Guinee-Bissao</option>
+															<option value="83">Guyana</option>
+															<option value="84">Guyane fran�aise</option>
+															<option value="85">Haiti</option>
+															<option value="86">Honduras</option>
+															<option value="87">Hong Kong</option>
+															<option value="88">Hongrie</option>
+															<option value="89">Ile Christmas</option>
+															<option value="90">Ile Norfolk</option>
+															<option value="91">Iles Cayman</option>
+															<option value="92">Iles Cook</option>
+															<option value="93">Iles des Cocos</option>
+															<option value="94">Iles Falkland</option>
+															<option value="95">Iles Feroe</option>
+															<option value="96">Iles Marshall</option>
+															<option value="97">Iles Pitcairn</option>
+															<option value="98">Iles Salomon</option>
+															<option value="99">Iles Svalbard et Jan Mayen</option>
+															<option value="100">Iles Turks-et-Caicos</option>
+															<option value="101">Iles Vierges americaines</option>
+															<option value="102">Iles Vierges britanniques</option>
+															<option value="103">Inde</option>
+															<option value="104">Indonesie</option>
+															<option value="105">Iran</option>
+															<option value="106">Iraq</option>
+															<option value="107">Irlande</option>
+															<option value="108">Islande</option>
+															<option value="109">Israel</option>
+															<option value="110">Italie</option>
+															<option value="111">Jamaique</option>
+															<option value="112">Japon</option>
+															<option value="113">Jordanie</option>
+															<option value="114">Kazakhstan</option>
+															<option value="115">Kenya</option>
+															<option value="116">Kirghizistan</option>
+															<option value="117">Kiribati</option>
+															<option value="118">Koweit</option>
+															<option value="119">Laos</option>
+															<option value="120">Lesotho</option>
+															<option value="121">Lettonie</option>
+															<option value="122">Liban</option>
+															<option value="123">Liberia</option>
+															<option value="124">Libye</option>
+															<option value="125">Liechtenstein</option>
+															<option value="126">Lituanie</option>
+															<option value="127">Luxembourg</option>
+															<option value="128">Macao</option>
+															<option value="129">Macedoine</option>
+															<option value="130">Madagascar</option>
+															<option value="131">Malaisie</option>
+															<option value="132">Malawi</option>
+															<option value="133">Maldives</option>
+															<option value="134">Mali</option>
+															<option value="135">Malte</option>
+															<option value="136">Mariannes du Nord</option>
+															<option value="137">Maroc</option>
+															<option value="138">Martinique</option>
+															<option value="139">Maurice</option>
+															<option value="140">Mauritanie</option>
+															<option value="141">Mayotte</option>
+															<option value="142">Mexique</option>
+															<option value="143">Micronesie</option>
+															<option value="144">Moldavie</option>
+															<option value="145">Monaco</option>
+															<option value="146">Mongolie</option>
+															<option value="147">Montserrat</option>
+															<option value="148">Mozambique</option>
+															<option value="149">Namibie</option>
+															<option value="150">Nauru</option>
+															<option value="151">Nepal</option>
+															<option value="152">Nicaragua</option>
+															<option value="153">Niger</option>
+															<option value="154">Nigeria</option>
+															<option value="155">Nioue</option>
+															<option value="156">Norvege</option>
+															<option value="157">Nouvelle-Caledonie</option>
+															<option value="158">Nouvelle-Zelande</option>
+															<option value="159">Oman</option>
+															<option value="160">Ouganda</option>
+															<option value="161">Ouzbekistan</option>
+															<option value="162">Pakistan</option>
+															<option value="163">Panama</option>
+															<option value="164">Papouasie-Nouvelle-Guinee</option>
+															<option value="165">Paraguay</option>
+															<option value="166">Pays-Bas</option>
+															<option value="167">Perou</option>
+															<option value="168">Philippines</option>
+															<option value="169">Pologne</option>
+															<option value="170">Polynesie fran�aise</option>
+															<option value="171">Porto Rico</option>
+															<option value="172">Portugal</option>
+															<option value="173">Qatar</option>
+															<option value="174">Republique centrafricaine</option>
+															<option value="175">Republique dominicaine</option>
+															<option value="176">Republique tcheque</option>
+															<option value="177">Reunion</option>
+															<option value="178">Roumanie</option>
+															<option value="179">Royaume-Uni</option>
+															<option value="180">Russie</option>
+															<option value="181">Rwanda</option>
+															<option value="182">Sahara occidental35</option>
+															<option value="183">Saint-Christophe-et-Nieves</option>
+															<option value="184">Sainte-Helene</option>
+															<option value="185">Sainte-Lucie</option>
+															<option value="186">Saint-Marin</option>
+															<option value="187">Saint-Pierre-et-Miquelon</option>
+															<option value="188">Saint-Siege</option>
+															<option value="189">Saint-Vincent-et-les-Grenadines</option>
+															<option value="190">Salvador</option>
+															<option value="191">Samoa</option>
+															<option value="192">Samoa americaines</option>
+															<option value="193">Sao Tome-et-Principe</option>
+															<option value="194">Senegal</option>
+															<option value="195">Serbie-et-Montenegro</option>
+															<option value="196">Seychelles</option>
+															<option value="197">Sierra Leone</option>
+															<option value="198">Singapour</option>
+															<option value="199">Slovaquie</option>
+															<option value="200">Slovenie</option>
+															<option value="201">Somalie</option>
+															<option value="202">Soudan</option>
+															<option value="203">Sri Lanka</option>
+															<option value="204">Suede</option>
+															<option value="205">Suisse</option>
+															<option value="206">Suriname</option>
+															<option value="207">Swaziland</option>
+															<option value="208">Syrie</option>
+															<option value="209">Tadjikistan</option>
+															<option value="210">Taiwan</option>
+															<option value="211">Tanzanie</option>
+															<option value="212">Tchad</option>
+															<option value="213">Thailande</option>
+															<option value="214">Timor oriental</option>
+															<option value="216">Tokelaou</option>
+															<option value="217">Tonga</option>
+															<option value="218">Trinite-et-Tobago</option>
+															<option value="219">Tunisie</option>
+															<option value="220">Turkmenistan</option>
+															<option value="221">Turquie</option>
+															<option value="222">Tuvalu</option>
+															<option value="223">Ukraine</option>
+															<option value="224">Uruguay</option>
+															<option value="225">Vanuatu</option>
+															<option value="226">Venezuela</option>
+															<option value="227">Viet Nam</option>
+															<option value="228">Wallis-et-Futuna</option>
+															<option value="229">Yemen</option>
+															<option value="230">Zambie</option>
+															<option value="231">Zimbabwe</option>
+														</select>
+													</div>
+												</div>
+											</div>
+
+											<div class="row">
+												<div class="col-md-6">
+													<div class="form-group form-control-default required">
+														<label for="cityOri">Ville/Village d'origine:</label> <input
+															ng-model="currUser.cityOrigin" type="text"
+															class="form-control" id="city"
+															placeholder="Ville de residence">
+													</div>
+												</div>
+												<div class="col-md-6">
+													<div class="form-group form-control-default required">
+														<label for="countryOrig">Pays d'origine:</label> <select
+															name="countryOrig" class="form-control"
+															ng-model="currUser.countryOrigin.id" data-size="231">
+															<option value="215">Togo</option>
+															<option value="68">France</option>
+															<option value="64">Etats-Unis</option>
+															<option value="23">Belgique</option>
+															<option value="1">Afghanistan</option>
+															<option value="2">Afrique du Sud</option>
+															<option value="3">Albanie</option>
+															<option value="4">Algerie</option>
+															<option value="5">Allemagne</option>
+															<option value="6">Andorre</option>
+															<option value="7">Angola</option>
+															<option value="8">Anguilla</option>
+															<option value="9">Antigua-et-Barbuda</option>
+															<option value="10">Antilles neerlandaises</option>
+															<option value="11">Arabie saoudite</option>
+															<option value="12">Argentine</option>
+															<option value="13">Armenie</option>
+															<option value="14">Aruba</option>
+															<option value="15">Australie</option>
+															<option value="16">Autriche</option>
+															<option value="17">Azerbaidjan</option>
+															<option value="18">Bahamas</option>
+															<option value="19">Bahrein</option>
+															<option value="20">Bangladesh</option>
+															<option value="21">Barbade</option>
+															<option value="22">Belau</option>
+															<option value="24">Belize</option>
+															<option value="25">Benin</option>
+															<option value="26">Bermudes</option>
+															<option value="27">Bhoutan</option>
+															<option value="28">Bielorussie</option>
+															<option value="29">Birmanie</option>
+															<option value="30">Bolivie</option>
+															<option value="31">Bosnie-Herzegovine</option>
+															<option value="32">Botswana</option>
+															<option value="33">Bresil</option>
+															<option value="34">Brunei</option>
+															<option value="35">Bulgarie</option>
+															<option value="36">Burkina Faso</option>
+															<option value="37">Burundi</option>
+															<option value="38">Cambodge</option>
+															<option value="39">Cameroun</option>
+															<option value="40">Canada</option>
+															<option value="41">Cap-Vert</option>
+															<option value="42">Chili</option>
+															<option value="43">Chine</option>
+															<option value="44">Chypre</option>
+															<option value="45">Colombie</option>
+															<option value="46">Comores</option>
+															<option value="47">Congo</option>
+															<option value="48">Congo (Republique
+																democratique du )</option>
+															<option value="49">Coree du Nord</option>
+															<option value="50">Coree du Sud</option>
+															<option value="51">Costa Rica</option>
+															<option value="52">Cote d''Ivoire</option>
+															<option value="53">Croatie</option>
+															<option value="54">Cuba</option>
+															<option value="55">Danemark</option>
+															<option value="56">Djibouti</option>
+															<option value="57">Dominique</option>
+															<option value="58">egypte</option>
+															<option value="59">emirats arabes unis</option>
+															<option value="60">equateur</option>
+															<option value="61">erythree</option>
+															<option value="62">Espagne</option>
+															<option value="63">Estonie</option>
+															<option value="65">ethiopie</option>
+															<option value="66">Fidji</option>
+															<option value="67">Finlande</option>
+															<option value="69">Gabon</option>
+															<option value="70">Gambie</option>
+															<option value="71">Georgie</option>
+															<option value="72">Ghana</option>
+															<option value="73">Gibraltar</option>
+															<option value="74">Grece</option>
+															<option value="75">Grenade</option>
+															<option value="76">Groenland</option>
+															<option value="77">Guadeloupe</option>
+															<option value="78">Guam</option>
+															<option value="79">Guatemala</option>
+															<option value="80">Guinee</option>
+															<option value="81">Guinee equatoriale</option>
+															<option value="82">Guinee-Bissao</option>
+															<option value="83">Guyana</option>
+															<option value="84">Guyane fran�aise</option>
+															<option value="85">Haiti</option>
+															<option value="86">Honduras</option>
+															<option value="87">Hong Kong</option>
+															<option value="88">Hongrie</option>
+															<option value="89">Ile Christmas</option>
+															<option value="90">Ile Norfolk</option>
+															<option value="91">Iles Cayman</option>
+															<option value="92">Iles Cook</option>
+															<option value="93">Iles des Cocos</option>
+															<option value="94">Iles Falkland</option>
+															<option value="95">Iles Feroe</option>
+															<option value="96">Iles Marshall</option>
+															<option value="97">Iles Pitcairn</option>
+															<option value="98">Iles Salomon</option>
+															<option value="99">Iles Svalbard et Jan Mayen</option>
+															<option value="100">Iles Turks-et-Caicos</option>
+															<option value="101">Iles Vierges americaines</option>
+															<option value="102">Iles Vierges britanniques</option>
+															<option value="103">Inde</option>
+															<option value="104">Indonesie</option>
+															<option value="105">Iran</option>
+															<option value="106">Iraq</option>
+															<option value="107">Irlande</option>
+															<option value="108">Islande</option>
+															<option value="109">Israel</option>
+															<option value="110">Italie</option>
+															<option value="111">Jamaique</option>
+															<option value="112">Japon</option>
+															<option value="113">Jordanie</option>
+															<option value="114">Kazakhstan</option>
+															<option value="115">Kenya</option>
+															<option value="116">Kirghizistan</option>
+															<option value="117">Kiribati</option>
+															<option value="118">Koweit</option>
+															<option value="119">Laos</option>
+															<option value="120">Lesotho</option>
+															<option value="121">Lettonie</option>
+															<option value="122">Liban</option>
+															<option value="123">Liberia</option>
+															<option value="124">Libye</option>
+															<option value="125">Liechtenstein</option>
+															<option value="126">Lituanie</option>
+															<option value="127">Luxembourg</option>
+															<option value="128">Macao</option>
+															<option value="129">Macedoine</option>
+															<option value="130">Madagascar</option>
+															<option value="131">Malaisie</option>
+															<option value="132">Malawi</option>
+															<option value="133">Maldives</option>
+															<option value="134">Mali</option>
+															<option value="135">Malte</option>
+															<option value="136">Mariannes du Nord</option>
+															<option value="137">Maroc</option>
+															<option value="138">Martinique</option>
+															<option value="139">Maurice</option>
+															<option value="140">Mauritanie</option>
+															<option value="141">Mayotte</option>
+															<option value="142">Mexique</option>
+															<option value="143">Micronesie</option>
+															<option value="144">Moldavie</option>
+															<option value="145">Monaco</option>
+															<option value="146">Mongolie</option>
+															<option value="147">Montserrat</option>
+															<option value="148">Mozambique</option>
+															<option value="149">Namibie</option>
+															<option value="150">Nauru</option>
+															<option value="151">Nepal</option>
+															<option value="152">Nicaragua</option>
+															<option value="153">Niger</option>
+															<option value="154">Nigeria</option>
+															<option value="155">Nioue</option>
+															<option value="156">Norvege</option>
+															<option value="157">Nouvelle-Caledonie</option>
+															<option value="158">Nouvelle-Zelande</option>
+															<option value="159">Oman</option>
+															<option value="160">Ouganda</option>
+															<option value="161">Ouzbekistan</option>
+															<option value="162">Pakistan</option>
+															<option value="163">Panama</option>
+															<option value="164">Papouasie-Nouvelle-Guinee</option>
+															<option value="165">Paraguay</option>
+															<option value="166">Pays-Bas</option>
+															<option value="167">Perou</option>
+															<option value="168">Philippines</option>
+															<option value="169">Pologne</option>
+															<option value="170">Polynesie fran�aise</option>
+															<option value="171">Porto Rico</option>
+															<option value="172">Portugal</option>
+															<option value="173">Qatar</option>
+															<option value="174">Republique centrafricaine</option>
+															<option value="175">Republique dominicaine</option>
+															<option value="176">Republique tcheque</option>
+															<option value="177">Reunion</option>
+															<option value="178">Roumanie</option>
+															<option value="179">Royaume-Uni</option>
+															<option value="180">Russie</option>
+															<option value="181">Rwanda</option>
+															<option value="182">Sahara occidental35</option>
+															<option value="183">Saint-Christophe-et-Nieves</option>
+															<option value="184">Sainte-Helene</option>
+															<option value="185">Sainte-Lucie</option>
+															<option value="186">Saint-Marin</option>
+															<option value="187">Saint-Pierre-et-Miquelon</option>
+															<option value="188">Saint-Siege</option>
+															<option value="189">Saint-Vincent-et-les-Grenadines</option>
+															<option value="190">Salvador</option>
+															<option value="191">Samoa</option>
+															<option value="192">Samoa americaines</option>
+															<option value="193">Sao Tome-et-Principe</option>
+															<option value="194">Senegal</option>
+															<option value="195">Serbie-et-Montenegro</option>
+															<option value="196">Seychelles</option>
+															<option value="197">Sierra Leone</option>
+															<option value="198">Singapour</option>
+															<option value="199">Slovaquie</option>
+															<option value="200">Slovenie</option>
+															<option value="201">Somalie</option>
+															<option value="202">Soudan</option>
+															<option value="203">Sri Lanka</option>
+															<option value="204">Suede</option>
+															<option value="205">Suisse</option>
+															<option value="206">Suriname</option>
+															<option value="207">Swaziland</option>
+															<option value="208">Syrie</option>
+															<option value="209">Tadjikistan</option>
+															<option value="210">Taiwan</option>
+															<option value="211">Tanzanie</option>
+															<option value="212">Tchad</option>
+															<option value="213">Thailande</option>
+															<option value="214">Timor oriental</option>
+															<option value="216">Tokelaou</option>
+															<option value="217">Tonga</option>
+															<option value="218">Trinite-et-Tobago</option>
+															<option value="219">Tunisie</option>
+															<option value="220">Turkmenistan</option>
+															<option value="221">Turquie</option>
+															<option value="222">Tuvalu</option>
+															<option value="223">Ukraine</option>
+															<option value="224">Uruguay</option>
+															<option value="225">Vanuatu</option>
+															<option value="226">Venezuela</option>
+															<option value="227">Viet Nam</option>
+															<option value="228">Wallis-et-Futuna</option>
+															<option value="229">Yemen</option>
+															<option value="230">Zambie</option>
+															<option value="231">Zimbabwe</option>
+														</select>
+													</div>
+												</div>
+											</div>
+
+											<div class="row">
+												<div class="col-md-6">
+													<div class="form-group form-control-default">
+														<label for="username">Nom d'utilisateur:</label> <input
+															ng-model="currUser.userName" type="text"
+															class="form-control" id="username" placeholder=Nom
+															d'utilisateur>
+													</div>
+												</div>
+												<div class="col-md-6">
+													<div class="form-group form-control-default required">
+														<label for="sex">Sex:</label> <select name="selectSex"
+															class="form-control" ng-model="currUser.sex"
+															data-size="2">
+															<option value="M">Homme</option>
+															<option value="F">Femme</option>
+														</select>
+													</div>
+												</div>
+
+
+											</div>
+											<div class="row">
+
+												<div class="col-md-6">
+													<div class="form-group form-control-default">
+														<label for="Naissance">Naissance:</label> <input
+															id="birthDate" ng-model="currUser.birthDate" type="text"
+															class="form-control datepicker">
+													</div>
+												</div>
+												<div class="col-md-6">
+													<div class="form-group form-control-default">
+														<label for="Membredepuis">Membre depuis:</label> <input
+															enabled="true" id="memerShipDate" type="text"
+															ng-model="currUser.membershipDate"
+															class="form-control datepicker">
+													</div>
+												</div>
+											</div>
+
+											<div class="row">
+												<div class="col-md-6">
+													<div class="form-group form-control-default">
+														<label for="emailAddress">Email:</label> <input
+															ng-model="currUser.email" type="text"
+															class="form-control" id="emailAddress"
+															placeholder="Email">
+													</div>
+												</div>
+												<div class="col-md-6" ng-show="theUser.canApprove">
+													<div class="form-group form-control-default">
+														<label for="sex">Administrateur:</label> <input
+															id="canChange" ng-model="currUser.canApprove"
+															type="checkbox" data-label="suffix" class="checkbox" />
+													</div>
+												</div>
+											</div>
+											<div class="row">
+												<div class="col-md-6">
+													<div class="form-group form-control-default">
+														<label for="password">Mot de Passe</label> <input
+															ng-model="currUser.password" type="password"
+															class="form-control" id="password"
+															placeholder="Mot de Passe" />
+													</div>
+												</div>
+												<div class="col-md-6" ng-show="theUser.canApprove">
+													<div class="form-group form-control-default">
+														<label for="alive">Decede:</label> <input id="alive"
+															ng-model="currUser.alive" type="checkbox"
+															data-label="suffix" class="checkbox" />
+													</div>
+												</div>
+											</div>
+											<div class="row">
+												<div class="col-md-6">
+													<div class="form-group form-control-default">
+														<label for="telephone">Telephone:</label> <input
+															ng-model="currUser.phone" type="text"
+															class="form-control" id="telephone"
+															placeholder="Telephone">
+													</div>
+												</div>
+												<div class="col-md-6">
+													<div class="form-group form-control-default">
+														<label for="address">Addresse:</label> <input
+															ng-model="currUser.address" type="text"
+															class="form-control" id="address" placeholder="Addresse">
+													</div>
+												</div>
+											</div>
+
+											<div class="row">
+
+												<div class="col-md-6">
+													<div class="form-group form-control-default">
+														<label for="position"> Poste occupe </label> <select
+															name="position" id="position"
+															ng-model="currUser.position.id">
+															<option ng-repeat="y in positions" value="::y.id::">::y.name::</option>
+														</select>
+													</div>
+												</div>
+											</div>
+											<button ng-click="saveUser(currUser)" type="submit"
+												class="btn btn-primary">Enregistrer</button>
+
+											<div class="alert alert-danger"
+												ng-show="failedLogin&&saveUserSubmitted">
+												<button type="button" class="close" data-dismiss="alert">
+													<span aria-hidden="true">&times;</span><span
+														class="sr-only">Fermer</span>
+												</button>
+												::currUserMessage::
+											</div>
+
+											<div class="alert alert-success"
+												ng-show="!failedLogin&&saveUserSubmitted">
+												<button type="button" class="close" data-dismiss="alert">
+													<span aria-hidden="true">&times;</span><span
+														class="sr-only">Fermer</span>
+												</button>
+												::currUserMessage::
+											</div>
+
+
+										</form>
+									</div>
+									<div class="tab-pane " id="2c">
+
+										<div class="row">
+											<div class="col-xs-12 col-sm-12 col-md-12 col-lg-12">
+												<form ng-submit="simpleSearch()">
+													<div class="search-1">
+														<div class="input-group">
+															<span class="input-group-addon"><i
+																class="icon-search"></i></span> <input ng-model="searchText"
+																type="text" class="form-control form-control-w-250"
+																placeholder="Trouver un Lamabouéen...">
+														</div>
+													</div>
+
+												</form>
+											</div>
+										</div>
+
+										<div class="row">
+
+											<div class="panel panel-default">
+												<!-- Data table -->
+												<table st-table="displayedCollection"
+													st-safe-src="searchResultArrays"
+													class="table table-striped" cellspacing="0" width="100%">
+													<tbody>
+														<tr ng-repeat="rowOfUsers in displayedCollection">
+															<td ng-repeat="u in rowOfUsers"><a href="#"><img
+																	fallback-src="images/members/default-avatar.png"
+																	src="images/members/::u.id::.jpg"
+																	class="img-thumbnail img-responsive img-circle"
+																	id="personImage" width="70px"></a>
+																<h6 class="text-justify">::u.firstName+'
+																	'+u.lastName::</h6>
+																<h6 class="text-justify">::u.cityResidence:: ,
+																	::u.countryResidence.name::</h6> <strong>C'est quoi
+																	le lien?</strong> <br />
+																<button ng-click="saveFamLinkAdmin(u.id,5)"
+																	type="submit" class="btn btn-success">Papa</button>
+																<button ng-click="saveFamLinkAdmin(u.id,4)"
+																	type="submit" class="btn btn-success">Maman</button> <br />
+																<button ng-click="saveFamLinkAdmin(u.id,3)"
+																	type="submit" class="btn btn-warning">Epoux</button>
+																<button ng-click="saveFamLinkAdmin(u.id,2)"
+																	type="submit" class="btn btn-warning">Epouse</button> <br />
+																<button ng-click="saveFamLinkAdmin(u.id,1)"
+																	type="submit" class="btn btn-info">Enfant</button>
+																<button ng-click="saveFamLinkAdmin(u.id,0)"
+																	type="submit" class="btn btn-danger">Aucun</button></td>
+
+														</tr>
+
+													</tbody>
+													<tfoot>
+														<tr>
+															<td colspan="5" class="text-center">
+																<div st-pagination="" st-items-by-page="1"
+																	st-displayed-pages="100"></div>
+															</td>
+														</tr>
+													</tfoot>
+												</table>
+												<!-- // Data table -->
+
+												<div class="alert alert-success" ng-show="currUserMessage">
+													<button type="button" class="close" data-dismiss="alert">
+														<span aria-hidden="true">&times;</span><span
+															class="sr-only">Fermer</span>
+													</button>
+													::currUserMessage::
+												</div>
+
+											</div>
+
+
+										</div>
+
+										<div class="row">
+											<div class="col-xs-12 col-sm-12 col-md-12 col-lg-12">
+												<div class="tree">
+													<ul>
+														<li><a href="#" ng-click="refreshTree(currUser.dad)">
+																<table cellpadding="0" border="0" cellspacing="0">
+																	<tr>
+																		<td><img
+																			src="images/members/::currUser.dad.id::.jpg"
+																			fallback-src="images/members/default-avatar.png"
+																			class="img-thumbnail img-responsive img-circle"
+																			id="theChildrePic" width="50px"> <br /> <h7
+																				class="text-center"> ::currUser.dad.firstName+'
+																			'+currUser.dad.lastName:: </h7></td>
+																		<td><img
+																			src="images/members/::currUser.mum.id::.jpg"
+																			fallback-src="images/members/default-avatar.png"
+																			class="img-thumbnail img-responsive img-circle"
+																			id="theChildrePic" width="50px"> <br /> <h7
+																				class="text-center"> ::+' -
+																			'+currUser.mum.firstName+' '+currUser.mum.lastName::
+																			</h7></td>
+																	</tr>
+
+																</table>
+
+
+														</a>
+															<ul>
+																<li><a href="#">
+
+																		<table cellpadding="0" border="0" cellspacing="0">
+																			<tr>
+																				<td><img
+																					src="images/members/::currUser.id::.jpg"
+																					fallback-src="images/members/default-avatar.png"
+																					class="img-thumbnail img-responsive img-circle"
+																					id="currUserPic" width="50px"> <br /> <h7
+																						class="text-center"> ::currUser.firstName+'
+																					'+currUser.lastName:: </h7></td>
+																				<td ng-repeat="sp in spouses" ng-if="spouses"><img
+																					src="images/members/::sp.id::.jpg"
+																					fallback-src="images/members/default-avatar.png"
+																					class="img-thumbnail img-responsive img-circle"
+																					id="theChildrePic" width="50px"> <br /> <h7
+																						class="text-center"> ::+' - '+sp.firstName+'
+																					'+sp.lastName:: </h7></td>
+																			</tr>
+
+																		</table>
+
+
+
+																</a>
+																	<ul ng-if="children">
+																		<li ng-repeat="c in children"><a href="#"
+																			ng-click="refreshTree(c)"> <img
+																				src="images/members/::c.id::.jpg"
+																				fallback-src="images/members/default-avatar.png"
+																				class="img-thumbnail img-responsive img-circle"
+																				id="theChildrePic" width="50px"> <br /> <h7
+																					class="text-center"> ::c.firstName+'
+																				'+c.lastName:: </h7>
+
+																		</a></li>
+																	</ul></li>
+																<li ng-repeat="s in siblings"><a href="#"
+																	ng-click="refreshTree(s)"> <img
+																		src="images/members/::s.id::.jpg"
+																		fallback-src="images/members/default-avatar.png"
+																		class="img-thumbnail img-responsive img-circle"
+																		id="theSiblingPic" width="50px"> <br /> <h7
+																			class="text-center"> ::s.firstName+'
+																		'+s.lastName:: </h7>
+
+																</a></li>
+															</ul></li>
+													</ul>
+												</div>
+
+											</div>
+
+										</div>
+
+									</div>
+
+									<div class="tab-pane" id="3b">
+
+										<div class="row">
+											<!-- Example: nv-file-select="" uploader="{Object}" options="{Object}" filters="{String}" -->
+											<input type="file" nv-file-select=""
+												uploader="userProfileUploader" /><br />
+										</div>
+
+										<div class="col-md-9" style="margin-bottom: 40px">
+											<h2>Choisissez votre photo</h2>
+
+											<table class="table">
+												<thead>
+													<tr>
+														<th width="50%">Nom</th>
+														<th ng-show="userProfileUploader.isHTML5">Tailler</th>
+														<th ng-show="userProfileUploader.isHTML5">Avancement</th>
+														<th>Etat</th>
+														<th>Actions</th>
+													</tr>
+												</thead>
+												<tbody>
+													<tr ng-repeat="item in userProfileUploader.queue">
+														<td><strong>:: item.file.name ::</strong> <!-- Image preview -->
+															<!--auto height--> <!--<div ng-thumb="{ file: item.file, width: 100 }"></div>-->
+															<!--auto width-->
+															<div ng-show="userProfileUploader.isHTML5"
+																ng-thumb="{ file: item._file, height: 100 }"></div> <!--fixed width and height -->
+															<!--<div ng-thumb="{ file: item.file, width: 100, height: 100 }"></div>-->
+														</td>
+														<td ng-show="userProfileUploader.isHTML5" nowrap>::
+															item.file.size/1024/1024|number:2 :: MB</td>
+														<td ng-show="userProfileUploader.isHTML5">
+															<div class="progress" style="margin-bottom: 0;">
+																<div class="progress-bar" role="progressbar"
+																	ng-style="{ 'width': item.progress + '%' }"></div>
+															</div>
+														</td>
+														<td class="text-center"><span
+															ng-show="item.isSuccess"><i
+																class="glyphicon glyphicon-ok"></i></span> <span
+															ng-show="item.isCancel"><i
+																class="glyphicon glyphicon-ban-circle"></i></span> <span
+															ng-show="item.isError"><i
+																class="glyphicon glyphicon-remove"></i></span></td>
+														<td nowrap>
+															<button type="button" class="btn btn-success btn-xs"
+																ng-click="item.upload()"
+																ng-disabled="item.isReady || item.isUploading || item.isSuccess">
+																<span class="glyphicon glyphicon-upload"></span> Charger
+															</button>
+															<button type="button" class="btn btn-warning btn-xs"
+																ng-click="item.cancel()" ng-disabled="!item.isUploading">
+																<span class="glyphicon glyphicon-ban-circle"></span>
+																Annuler
+															</button>
+															<button type="button" class="btn btn-danger btn-xs"
+																ng-click="item.remove()">
+																<span class="glyphicon glyphicon-trash"></span> Enlever
+															</button>
+														</td>
+													</tr>
+												</tbody>
+											</table>
+
+										</div>
+
+									</div>
+								</div>
+							</div>
+						</div>
+					</div>
+				</div>
+
+			</div>
+			<div class="item col-lg-3 col-md-6 col-xs-12">
+				<div class="page-section">
+					<div ng-include="'pages/sidebar.html'"></div>
+				</div>
+			</div>
+		</div>
+		<br />
+
+	</div>
+
+</div>
+<!-- // END #content -->
+

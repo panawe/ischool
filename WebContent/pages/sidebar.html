@@ -1,0 +1,187 @@
+<div>
+	<section ng-controller="sideBarCtrl" class="panel panel-info">
+		<header class="panel-heading">
+			<h3 class="panel-title">Sponsors</h3>
+		</header>
+		<div class="panel-body">
+			<div id="carousel-example-generic_adv"
+				class="carousel slide overlay overflow-hidden max-height-200"
+				data-ride="carousel">
+				<!-- Indicators -->
+				<!-- <ol class="carousel-indicators" id="carousel-indicators_adv"></ol> -->
+				<!-- Wrapper for slides -->
+				<div class="carousel-inner" id="carousel-inner_adv">
+					<div class="item" ng-class="{active:!$index}"
+						ng-show="::advertisement.hasImage::"
+						ng-repeat="advertisement in activeAdvertisements">
+						<a href="::advertisement.link::"
+							ng-click="openInNewTab(::advertisement.link::)"> <img
+							src="::advertisement.imagePath::"
+							style="max-height: 200px; width: 100%;" />
+						</a>
+					</div>
+				</div>
+				<!-- Controls -->
+				<a class="left carousel-control"
+					href="#carousel-example-generic_adv" data-slide="prev"> <span
+					class="glyphicon glyphicon-chevron-left"></span>
+				</a> <a class="right carousel-control"
+					href="#carousel-example-generic_adv" data-slide="next"> <span
+					class="glyphicon glyphicon-chevron-right"></span>
+				</a>
+			</div>
+		</div>
+	</section>
+
+	<section ng-controller="userCtrl" class="panel panel-info">
+		<header class="panel-heading">
+			<h3 class="panel-title">Donateurs</h3>
+		</header>
+		<div class="panel-body">
+
+			<form ng-submit="submitDonation()">
+			<div class="form-group">
+						<label for="status">Selectioner le Projet</label> <select
+							name="select" class="form-control" ng-model="project"
+							data-style="btn-white" data-size="5">	
+							<option value="1">Rehabilitation piste Sahoude-Lama Bou </option>													
+							<option value="2">Arbre Genealogique de Lama-Bou</option> 
+						</select>
+					</div>
+					 
+				<div class="form-group form-control-default">
+					
+					<div class="input-group">
+						<div class="input-group-addon">$</div>
+						<input type="number" class="form-control" ng-model="amount"
+							id="exampleInputAmount" placeholder="Montant">
+						<div class="input-group-addon">
+							<button class="btn btn-success">Donner</button>
+						</div>
+					</div>
+
+				</div>
+			</form>
+
+
+			<table st-table="displayedCollection" st-safe-src="contributions"
+				class="table table-striped" cellspacing="0" width="100%">
+				<thead>
+					<tr>
+
+						<th colspan="5">Merci a tous nos genereux donateurs</th>
+					</tr>
+					<tr>
+						<th>Nom</th>
+						<th>Montant</th>
+
+					</tr>
+				</thead>
+				<tbody>
+					<tr ng-repeat="donateur in displayedCollection">
+						<td>::donateur.member::</td>
+						<td>$::donateur.amount::</td>
+					</tr>
+				</tbody>
+				<tfoot>
+					<tr>
+						<td colspan="3" class="text-center">
+							<div st-pagination="" st-items-by-page="5"
+								st-displayed-pages="100"></div>
+						</td>
+					</tr>
+				</tfoot>
+			</table>
+		</div>
+	</section>
+
+
+	<section ng-controller="sideBarCtrl" class="panel panel-info">
+		<header class="panel-heading">
+			<h3 class="panel-title">Evenements prochains</h3>
+		</header>
+		<div class="panel-body">
+
+			<table st-table="displayedCollection2" st-safe-src="futureEvents"
+				class="table table-striped" cellspacing="0" width="100%">
+				<thead>
+					<tr>
+
+						<th colspan="5">Marquez vos calendriers</th>
+					</tr>
+					<tr>
+						<th>Evenement</th>
+						<th>Date</th>
+
+					</tr>
+				</thead>
+				<tbody>
+					<tr ng-repeat="e in displayedCollection2">
+						<td><a href="" ng-click="showEventModal(e)">::e.title::</a></td>
+						<td><a href="" ng-click="showEventModal(e)">::e.startsAt|date:'medium'::</a></td>
+					</tr>
+				</tbody>
+				<tfoot>
+					<tr>
+						<td colspan="3" class="text-center">
+							<div st-pagination="" st-items-by-page="5"
+								st-displayed-pages="100"></div>
+						</td>
+					</tr>
+				</tfoot>
+			</table>
+
+		</div>
+
+
+		<!--/modal-->
+		<div id="myEventModal" class="modal fade" tabindex="-1" role="dialog"
+			aria-labelledby="myEventModalLabel" aria-hidden="true">
+			<div class="modal-dialog">
+				<div class="modal-content">
+					<div class="modal-header bg-info">
+						<button type="button" class="close" data-dismiss="modal"
+							aria-hidden="true">X</button>
+						<h1 id="myEventModalLabel" class="text-center"></h1>
+					</div>
+					<div class="modal-body">
+						<div class="container-fluid">
+							<div class="row">
+
+								<h4 class="text-justify" ng-show="currEvent.description">
+									<i class="fa fa-fw fa-map-marker fa-2x"></i>::currEvent.description::
+								</h4>
+
+							</div>
+							<hr>
+							<div class="row">
+								<h4 class="text-justify" ng-show="currEvent.city">
+									<i class="fa fa-fw fa-map-marker fa-2x"></i>::currEvent.city::
+								</h4>
+								<h4 class="text-justify" ng-show="currEvent.address">
+									<i class="fa fa-fw fa-map-marker fa-2x"></i>::currEvent.address::
+								</h4>
+								<h4 class="text-justify" ng-show="currEvent.startsAt">
+									<i class="fa fa-fw fa-clock-o fa-2x"></i>
+									::currEvent.startsAt|date:'medium'::
+								</h4>
+								<h4 class="text-justify" ng-show="currEvent.endsAt">
+									<i class="fa fa-fw fa-clock-o fa-2x"></i>::currEvent.endsAt|date:'medium'::
+								</h4>
+
+							</div>
+						</div>
+					</div>
+					<div class="modal-footer bg-info">
+						<button class="btn btn-lg btn-default center-block"
+							data-dismiss="modal" aria-hidden="true">Fermer</button>
+					</div>
+				</div>
+			</div>
+		</div>
+
+		<!--/modal-->
+	</section>
+
+
+</div>

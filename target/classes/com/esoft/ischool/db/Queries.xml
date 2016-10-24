@@ -1,0 +1,14 @@
+<?xml version="1.0"?>
+<!DOCTYPE hibernate-mapping PUBLIC "-//Hibernate/Hibernate Mapping DTD 3.0//EN"
+"http://hibernate.sourceforge.net/hibernate-mapping-3.0.dtd">
+<hibernate-mapping package="com.edu.db">
+
+	<sql-query name="getUser">
+		<return alias="getUser" class="com.ukad.security.model.User" />
+
+		SELECT * FROM USERS
+	  
+	<![CDATA[
+	]]>
+	</sql-query>
+</hibernate-mapping>

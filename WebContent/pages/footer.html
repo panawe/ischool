@@ -1,0 +1,57 @@
+
+<section class="footer-section" ng-controller="userCtrl"
+	style="background-color: transparent; height: 100px;">
+	<div class="container">
+		<div class="row">
+			<div class="col-xs-6 col-xs-2" ng-controller="weblinkCtrl">
+				<ul class="list-unstyled">
+				</ul>
+			</div>
+
+			<div class="col-xs-6 col-xs-2">
+				<ul class="list-unstyled">
+
+					<li class="active"><a
+						style="color: #8800c0; font-weight: bold;" href="#pages/statuts">Fournitures</a></li>
+					<li><a style="color: #8800c0; font-weight: bold;"
+						href="#pages/reglements">Programmes</a></li>
+					<li><a style="color: #8800c0; font-weight: bold;"
+						href="#pages/membres">Personnel</a></li>
+				</ul>
+			</div>
+			<div class="col-xs-6 col-xs-2">
+
+				<ul class="list-unstyled">
+					<li><a style="color: #8800c0; font-weight: bold;"
+						href="#pages/projectsEndUser">Resultats Scolaires</a></li>
+					<li><a style="color: #8800c0; font-weight: bold;"
+						href="#pages/eventCalendar">Calendrier Scolaire</a></li>
+					<li><a style="color: #8800c0; font-weight: bold;"
+						href="#pages/meetings">Frais Scolaire</a></li>
+				</ul>
+			</div>
+			<div class="col-xs-12 col-xs-3 text-center">
+				<br/><br/>  
+				<button class="btn btn-info btn-icon-stacked"
+					ng-click="openInNewTab('https://www.facebook.com/arelbou.togo')">
+					<i class="fa fa-2x fa-facebook"></i> <span>Rejoignez-nous <br>Sur
+						Facebook
+					</span>
+				</button>
+
+			</div>
+
+
+			<div class="col-xs-12 col-xs-3 text-center">
+				<br/><br/>
+				<button class="btn btn-info btn-icon-stacked"
+					ng-click="openInNewTab('https://twitter.com/arelboutg1')">
+					<i class="fa fa-2x fa-twitter"></i> <span>Rejoignez-nous <br>Sur
+						Twitter
+					</span>
+				</button>
+
+			</div>
+		</div>
+	</div>
+</section>

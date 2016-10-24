@@ -1,0 +1,88 @@
+<div ng-include="'pages/menubg.html'"></div>
+<div class="bg-white">
+	<div class="container">
+		<div class="row">
+			<div class="item col-lg-9 col-md-6 col-xs-12" ng-controller="eventCtrl">
+				<div class="page-section">
+
+					<h1 class="page-section-heading">Photos albums des Evenements
+						et rencontres</h1>
+
+					<div class="panel panel-default">
+						<!-- Data table -->
+						<table st-table="displayedCollection"
+							st-safe-src="eventsWithAlbumArray" class="table table-striped"
+							cellspacing="0" width="100%">
+							<thead>
+								<tr>
+
+									<th colspan="5"><input st-search
+										placeholder="Rechercher un membre"
+										class="input-sm form-control" type="search" /></th>
+								</tr>
+								<tr>
+									<th></th>
+
+								</tr>
+							</thead>
+							<tbody>
+								<tr ng-repeat="rowOfEvents in displayedCollection">
+									<td ng-repeat="aEvent in rowOfEvents">
+
+										<div class="panel panel-default relative"
+											ng-show="::aEvent.hasPhoto::">
+											<div
+												class="ribbon-heading text-h5 ribbon-primary inline left absolute margin-none">::aEvent.albumTag::</div>
+											<div class="cover hover overlay margin-none"
+												style="max-height: 163px; max-width: 246px;">
+												<img src="images/events/::aEvent.id::/::aEvent.id::_1.jpg"
+													alt="location" class="img-responsive"
+													style="max-width: 246px;" /> <a
+													ng-show="::aEvent.hasPhoto::" href="#pages/eventAlbum"
+													ng-click="getEventAlbum(aEvent)"
+													class="overlay overlay-full overlay-bg-black overlay-hover">
+													<span class="v-center"> <span
+														class="btn btn-circle btn-white"><i
+															class="fa fa-eye"></i></span>
+												</span>
+												</a>
+
+											</div>
+											<div class="panel-body">
+												<h4 class="margin-v-0-5">::aEvent.title::</h4>
+											</div>
+										</div>
+
+
+									</td>
+
+								</tr>
+
+							</tbody>
+							<tfoot>
+								<tr>
+									<td colspan="5" class="text-center">
+										<div st-pagination="" st-items-by-page="3"
+											st-displayed-pages="100"></div>
+									</td>
+								</tr>
+							</tfoot>
+						</table>
+						<!-- // Data table -->
+					</div>
+
+				</div>
+			</div>
+			<div class="item col-lg-3 col-md-6 col-xs-12">
+				<div class="page-section">
+					<div ng-include="'pages/sidebar.html'"></div>
+				</div>
+			</div>
+		</div>
+		<br />
+		<!-- // END .container -->
+	</div>
+	<!-- // END .bg-white -->
+</div>
+<!-- // END #content -->
+

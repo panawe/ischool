@@ -1,0 +1,117 @@
+<div ng-include="'pages/menubg.html'"></div>
+
+<div class="bg-white">
+	<div class="container">
+		<div class="row">
+			<div class="item col-lg-9 col-md-6 col-xs-12">
+		<div class="page-section" ng-controller="eventCtrl">
+
+			<div class="container">
+				<h2>Calendrier des Evenements</h2>
+			</div>
+			<h2 class="text-center">::vm.calendarTitle::</h2>
+
+			<div class="row">
+
+				<div class="col-md-6 text-center">
+					<div class="btn-group">
+
+						<button class="btn btn-primary" mwl-date-modifier
+							date="vm.viewDate" decrement="vm.calendarView">Previous
+						</button>
+						<button class="btn btn-default" mwl-date-modifier
+							date="vm.viewDate" set-to-today>Today</button>
+						<button class="btn btn-primary" mwl-date-modifier
+							date="vm.viewDate" increment="vm.calendarView">Next</button>
+					</div>
+				</div>
+
+				<br class="visible-xs visible-sm">
+
+				<div class="col-md-6 text-center">
+					<div class="btn-group">
+						<label class="btn btn-primary" ng-model="vm.calendarView"
+							uib-btn-radio="'year'">Year</label> <label
+							class="btn btn-primary" ng-model="vm.calendarView"
+							uib-btn-radio="'month'">Month</label> <label
+							class="btn btn-primary" ng-model="vm.calendarView"
+							uib-btn-radio="'week'">Week</label> <label
+							class="btn btn-primary" ng-model="vm.calendarView"
+							uib-btn-radio="'day'">Day</label>
+					</div>
+				</div>
+
+			</div>
+
+			<br>
+			
+			<mwl-calendar events="events" view="vm.calendarView"
+				view-title="vm.calendarTitle" view-date="vm.viewDate"
+				on-event-click="vm.eventClicked(calendarEvent)"
+				on-event-times-changed="vm.eventTimesChanged(calendarEvent); calendarEvent.startsAt = calendarNewEventStart; calendarEvent.endsAt = calendarNewEventEnd"
+				cell-is-open="vm.isCellOpen" day-view-start="06:00"
+				day-view-end="22:00" day-view-split="30"
+				cell-modifier="vm.modifyCell(calendarCell)"> </mwl-calendar>
+
+			<br> <br> <br>
+
+		<div id="myModal" class="modal fade" tabindex="-1" role="dialog"
+			aria-labelledby="myModalLabel" aria-hidden="true">
+			<div class="modal-dialog">
+				<div class="modal-content">
+					<div class="modal-header bg-info">
+						<button type="button" class="close" data-dismiss="modal"
+							aria-hidden="true">X</button>
+						<h1 id="myModalLabel" class="text-center"></h1>
+					</div>
+					<div class="modal-body">
+						<div class="container-fluid">
+							
+							<div class="row">
+								<h4 class="text-center">
+									<i class="fa fa-fw fa-bullhorn fa-2x"></i>::currEvent.description::
+								</h4>
+								<h4 class="text-center">
+									<i class="fa fa-fw fa-clock-o fa-2x"></i> Debut ::currEvent.startsAt|date:'medium'::
+								</h4>
+								<h4 class="text-center">
+									<i class="fa fa-fw fa-clock-o fa-2x"></i>Fin ::currEvent.endsAt|date:'medium'::
+								</h4>
+								<h4 class="text-center">
+									<i class="fa fa-fw fa-map-marker fa-2x"></i>  ::currEvent.address::
+								</h4>
+							</div>
+						</div>
+					</div>
+					<div class="modal-footer bg-info">
+						<button class="btn btn-lg btn-default center-block"
+							data-dismiss="modal" aria-hidden="true">Fermer</button>
+					</div>
+				</div>
+			</div>
+		</div>
+		<!--/modal-->
+
+
+		</div>
+
+</div>
+			<div class="item col-lg-3 col-md-6 col-xs-12">
+				<div class="page-section">
+					<div ng-include="'pages/sidebar.html'"></div>
+				</div>
+			</div>
+		</div>
+
+	</div>
+
+
+	<br />
+
+</div>
+<!-- // END .bg-white -->
+
+
+ 
+<!-- // END #content -->
+

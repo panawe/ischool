@@ -1,0 +1,217 @@
+<div ng-include="'pages/menubg.html'"></div>
+<div class="bg-white" ng-controller="userCtrl">
+	<div class="container" style="width: 100%;">
+		<div class="row">
+			<div class="item col-lg-9 col-md-6 col-xs-12" style="width: 100%;">
+				<div class="page-section">
+					<div class="row">
+						<div class="col-xs-6 col-sm-6 col-md-6 col-lg-6">
+							<form ng-submit="userSearch()">
+								<div class="search-1">
+									<div class="input-group">
+										<span class="input-group-addon"><i class="icon-search"></i></span>
+										<input ng-model="searchCrit" type="text"
+											class="form-control form-control-w-250"
+											placeholder="Entre le nom et/ou le prenom...">
+									</div>
+								</div>
+
+							</form>
+						</div>
+					</div>
+					<div class="row">
+						<div class="col-xs-12 col-sm-12 col-md-12 col-lg-12">
+							<div class="panel panel-default">
+								<!-- Data table -->
+								<table st-table="displayedCollection1"
+									st-safe-src="searchResults" class="table table-striped"
+									cellspacing="0" width="100%">
+									<thead>
+										<tr>
+											<th>Resultat</th>
+										</tr>
+									</thead>
+									<tbody>
+										<tr ng-repeat="aUser in displayedCollection1">
+											<td><a ng-href="#" ng-click="refreshModal(aUser)">::aUser.lastName
+													+' '+aUser.firstName::
+													</a>
+											</td>
+											<td><a ng-href="#" ng-click="refreshModal(aUser)">
+													<h6 class="text-justify" ng-show="aUser.cityResidence">
+														<i class="fa fa-fw fa-map-marker fa-2x"></i> Reside a
+														::aUser.cityResidence::, ::aUser.countryResidence.name::
+													</h6>
+											</a>
+											</td>
+											<td>
+
+												<h6 class="text-justify" ng-show="aUser.email">
+													<i class="fa fa-fw fa-envelope-o fa-2x"></i><a
+														ng-href="mailto: ::aUser.email::">::aUser.email::</a>
+												</h6></td>
+
+										</tr>
+
+									</tbody>
+									<tfoot>
+										<tr>
+											<td colspan="5" class="text-center">
+												<div st-pagination="" st-items-by-page="5"
+													st-displayed-pages="100"></div>
+											</td>
+										</tr>
+									</tfoot>
+								</table>
+								<!-- // Data table -->
+							</div>
+						</div>
+					</div>
+
+				</div>
+
+				<div class="page-section">
+					<div class="row">
+
+
+						<div class="modal-header bg-info">
+							<div class="row">
+								<div class="col-xs-2 col-sm-2 col-md-2 col-lg-2">
+									<img src="images/members/::currUser.id::.jpg"
+										fallback-src="images/members/default-avatar.png"
+										class="img-thumbnail img-responsive img-circle">
+								</div>
+
+								<div class="col-xs-2 col-sm-2 col-md-2 col-lg-2">
+									<strong><h6 id="myModalLabel" class="text-justify"></h6></strong>
+									<h6 class="text-justify" ng-show="currUser.cityResidence">
+										<i class="fa fa-fw fa-map-marker fa-2x"></i> Reside a
+										::currUser.cityResidence::, ::currUser.countryResidence.name::
+									</h6>
+									<h6 class="text-justify" ng-show="currUser.cityOrigin">
+										<i class="fa fa-fw fa-map-marker fa-2x"></i>Originaire de
+										::currUser.cityOrigin::, ::currUser.countryOrigin.name::
+									</h6>
+
+								</div>
+
+								<div class="col-xs-5 col-sm-5 col-md-5 col-lg-5">
+
+									<h6 class="text-justify" ng-show="currUser.phone">
+										<i class="fa fa-fw fa-phone fa-2x"></i> ::currUser.phone::
+									</h6>
+									<h6 class="text-justify" ng-show="currUser.email">
+										<i class="fa fa-fw fa-envelope-o fa-2x"></i><a
+											ng-href="mailto: ::currUser.email::">::currUser.email::</a>
+									</h6>
+									<h6 class="text-justify" ng-show="currUser&&currUser.status==1">
+										<i class="fa fa-fw fa-user fa-2x"></i> Membre depuis
+										::currUser.membershipDate|date:: <font color="red"> <strong>-
+												::currUser.position.name::</strong></font>
+									</h6>
+									<h6 class="text-justify" ng-show="currUser&&currUser.status!=1">
+										<i class="fa fa-fw fa-user fa-2x"></i> Non Membre
+									</h6>
+								</div>
+							</div>
+
+						</div>
+
+
+						<div class="tree">
+							<ul>
+								<li><a href="#">
+										<table cellpadding="0" border="0" cellspacing="0">
+											<tr>
+												<td><a href="#" ng-click="refreshModal(currUser.dad)">
+														<img src="images/members/::currUser.dad.id::.jpg"
+														fallback-src="images/members/default-avatar.png"
+														class="img-thumbnail img-responsive img-circle"
+														id="theChildrePic" width="50px"> <br /> <h7
+															class="text-center"> ::currUser.dad.firstName+'
+														'+currUser.dad.lastName:: </h7>
+												</a></td>
+												<td><a href="#" ng-click="refreshModal(currUser.mum)">
+														<img src="images/members/::currUser.mum.id::.jpg"
+														fallback-src="images/members/default-avatar.png"
+														class="img-thumbnail img-responsive img-circle"
+														id="theChildrePic" width="50px"> <br /> <h7
+															class="text-center"> ::+' -
+														'+currUser.mum.firstName+' '+currUser.mum.lastName:: </h7>
+												</a></td>
+											</tr>
+
+										</table>
+
+								</a>
+
+									<ul>
+										<li><a href="#">
+
+												<table cellpadding="0" border="0" cellspacing="0">
+													<tr>
+														<td><a href="#" ng-click="refreshModal(currUser)">
+																<img src="images/members/::currUser.id::.jpg"
+																fallback-src="images/members/default-avatar.png"
+																class="img-thumbnail img-responsive img-circle"
+																id="theUserPic" width="50px"> <br /> <h7
+																	class="text-center"> ::currUser.firstName+'
+																'+currUser.lastName:: </h7>
+
+														</a></td>
+														<td ng-repeat="sp in spouses" ng-if="spouses"><a
+															href="#" ng-click="refreshModal(sp)"> <img
+																src="images/members/::sp.id::.jpg"
+																fallback-src="images/members/default-avatar.png"
+																class="img-thumbnail img-responsive img-circle"
+																id="theChildrePic" width="50px"> <br /> <h7
+																	class="text-center"> ::+' - '+sp.firstName+'
+																'+sp.lastName:: </h7>
+														</a></td>
+													</tr>
+
+												</table>
+
+
+
+										</a>
+											<ul ng-if="children">
+												<li ng-repeat="c in children"><a href="#"
+													ng-click="refreshModal(c)"> <img
+														src="images/members/::c.id::.jpg"
+														fallback-src="images/members/default-avatar.png"
+														class="img-thumbnail img-responsive img-circle"
+														id="theChildrePic" width="50px"> <br /> <h7
+															class="text-center"> ::c.firstName+' '+c.lastName::
+														</h7>
+
+												</a></li>
+											</ul></li>
+										<li ng-repeat="s in siblings"><a href="#"
+											ng-click="refreshModal(s)"> <img
+												src="images/members/::s.id::.jpg"
+												fallback-src="images/members/default-avatar.png"
+												class="img-thumbnail img-responsive img-circle"
+												id="theSiblingPic" width="50px"> <br /> <h7
+													class="text-center"> ::s.firstName+' '+s.lastName:: </h7>
+
+										</a></li>
+									</ul></li>
+							</ul>
+						</div>
+
+
+
+					</div>
+				</div>
+
+			</div>
+
+		</div>
+		<br />
+
+	</div>
+
+</div>
+<!-- // END #content -->
+

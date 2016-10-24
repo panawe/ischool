@@ -1,0 +1,213 @@
+<div ng-include="'pages/menubg.html'"></div>
+<div class="bg-white">
+	<div class="container" ng-controller="userCtrl">
+		<div class="row">
+			<div class="item col-lg-9 col-md-6 col-xs-12">
+				<div class="page-section">
+
+					<h1 class="page-section-heading">Les Membres de l'Association</h1>
+
+					<div class="panel panel-default">
+						<!-- Data table -->
+						<table st-table="displayedCollection" st-safe-src="userArrays"
+							class="table table-striped" cellspacing="0" width="100%">
+							<thead>
+								<tr>
+
+									<th colspan="5"><input st-search
+										placeholder="Rechercher un membre"
+										class="input-sm form-control" type="search" /></th>
+								</tr>
+								<tr>
+									<th></th>
+
+								</tr>
+							</thead>
+							<tbody>
+								<tr ng-repeat="rowOfUsers in displayedCollection">
+									<td ng-repeat="u in rowOfUsers"><a href=""
+										ng-click="showUserModal(u)"><img
+											fallback-src="images/members/default-avatar.png"
+											src="images/members/::u.id::.jpg"
+											class="img-thumbnail img-responsive img-circle"
+											id="personImage" width="70px"></a>
+										<h6 class="text-justify">::u.firstName+' '+u.lastName::</h6>
+										<h6 class="text-justify">::u.cityResidence:: ,
+											::u.countryResidence.name::</h6></td>
+
+								</tr>
+
+							</tbody>
+							<tfoot>
+								<tr>
+									<td colspan="5" class="text-center">
+										<div st-pagination="" st-items-by-page="4"
+											st-displayed-pages="100"></div>
+									</td>
+								</tr>
+							</tfoot>
+						</table>
+						<!-- // Data table -->
+					</div>
+
+					<div id="myModal" class="modal fade" tabindex="-1" role="dialog"
+						aria-labelledby="myModalLabel" aria-hidden="true">
+						<div class="modal-lg">
+							<div class="modal-content">
+							
+								<div class="modal-header bg-info">
+									<button type="button" class="close" data-dismiss="modal"
+										aria-hidden="true">X</button>
+									<div class="row">
+										<div class="col-xs-2 col-sm-2 col-md-2 col-lg-2">
+											<img src="images/members/::currUser.id::.jpg"
+												fallback-src="images/members/default-avatar.png"
+												class="img-thumbnail img-responsive img-circle">
+										</div>
+
+										<div class="col-xs-10 col-sm-10 col-md-10 col-lg-10">
+											<strong><h6 id="myModalLabel" class="text-justify"></h6></strong>
+											<h6 class="text-justify" ng-show="currUser.cityResidence">
+												<i class="fa fa-fw fa-map-marker fa-2x"></i> Reside a
+												::currUser.cityResidence::,
+												::currUser.countryResidence.name::
+											</h6>
+											<h6 class="text-justify" ng-show="currUser.cityOrigin">
+												<i class="fa fa-fw fa-map-marker fa-2x"></i>Originaire de
+												::currUser.cityOrigin::, ::currUser.countryOrigin.name::
+											</h6>
+											<h6 class="text-justify" ng-show="currUser.phone">
+												<i class="fa fa-fw fa-phone fa-2x"></i> ::currUser.phone::
+											</h6>
+											<h6 class="text-justify" ng-show="currUser.email">
+												<i class="fa fa-fw fa-envelope-o fa-2x"></i><a
+													ng-href="mailto: ::currUser.email::">::currUser.email::</a>
+											</h6>
+											<h6 class="text-justify" ng-show="currUser.status==1">
+												<i class="fa fa-fw fa-user fa-2x"></i> Membre depuis
+												::currUser.membershipDate|date:: <font color="red"> <strong>-
+														::currUser.position.name::</strong></font>
+											</h6>
+											<h6 class="text-justify" ng-show="currUser.status!=1">
+												<i class="fa fa-fw fa-user fa-2x"></i> Non Membre
+											</h6>
+										</div>
+									</div>
+
+								</div>
+								
+								<div class="modal-body">
+									<div class="container-fluid">
+										<div class="row">
+
+						<div class="tree">
+							<ul>
+								<li><a href="#">
+										<table cellpadding="0" border="0" cellspacing="0">
+											<tr>
+												<td><a href="#"
+													ng-click="refreshModal(currUser.dad)"> <img
+														src="images/members/::currUser.dad.id::.jpg"
+														fallback-src="images/members/default-avatar.png"
+														class="img-thumbnail img-responsive img-circle"
+														id="theChildrePic" width="50px"> <br /> <h7
+															class="text-center"> ::currUser.dad.firstName+'
+														'+currUser.dad.lastName:: </h7></a></td>
+												<td><a href="#"
+													ng-click="refreshModal(currUser.mum)"> <img
+														src="images/members/::currUser.mum.id::.jpg"
+														fallback-src="images/members/default-avatar.png"
+														class="img-thumbnail img-responsive img-circle"
+														id="theChildrePic" width="50px"> <br /> <h7
+															class="text-center"> ::+' -
+														'+currUser.mum.firstName+' '+currUser.mum.lastName:: </h7>
+												</a></td>
+											</tr>
+
+										</table>
+
+								</a>
+
+									<ul>
+										<li><a href="#">
+
+												<table cellpadding="0" border="0" cellspacing="0">
+													<tr>
+														<td><a href="#"
+															ng-click="refreshModal(currUser)"> <img
+																src="images/members/::currUser.id::.jpg"
+																fallback-src="images/members/default-avatar.png"
+																class="img-thumbnail img-responsive img-circle"
+																id="theUserPic" width="50px"> <br /> <h7
+																	class="text-center"> ::currUser.firstName+'
+																'+currUser.lastName:: </h7>
+
+														</a></td>
+														<td ng-repeat="sp in spouses" ng-if="spouses"><a
+															href="#" ng-click="refreshModal(sp)"> <img
+																src="images/members/::sp.id::.jpg"
+																fallback-src="images/members/default-avatar.png"
+																class="img-thumbnail img-responsive img-circle"
+																id="theChildrePic" width="50px"> <br /> <h7
+																	class="text-center"> ::+' - '+sp.firstName+'
+																'+sp.lastName:: </h7>
+														</a></td>
+													</tr>
+
+												</table>
+
+
+
+										</a>
+											<ul ng-if="children">
+												<li ng-repeat="c in children"><a href="#"
+													ng-click="refreshModal(c)"> <img
+														src="images/members/::c.id::.jpg"
+														fallback-src="images/members/default-avatar.png"
+														class="img-thumbnail img-responsive img-circle"
+														id="theChildrePic" width="50px"> <br /> <h7
+															class="text-center"> ::c.firstName+' '+c.lastName::
+														</h7>
+
+												</a></li>
+											</ul></li>
+										<li ng-repeat="s in siblings"><a href="#"
+											ng-click="refreshModal(s)"> <img
+												src="images/members/::s.id::.jpg"
+												fallback-src="images/members/default-avatar.png"
+												class="img-thumbnail img-responsive img-circle"
+												id="theSiblingPic" width="50px"> <br /> <h7
+													class="text-center"> ::s.firstName+' '+s.lastName:: </h7>
+
+										</a></li>
+									</ul></li>
+							</ul>
+						</div>
+
+						</div>
+
+									</div>
+								</div>
+								<div class="modal-footer bg-info">
+									<button class="btn btn-lg btn-default center-block"
+										data-dismiss="modal" aria-hidden="true">Fermer</button>
+								</div>
+							</div>
+						</div>
+					</div>
+
+				</div>
+			</div>
+			<div class="item col-lg-3 col-md-6 col-xs-12">
+				<div class="page-section">
+					<div ng-include="'pages/sidebar.html'"></div>
+				</div>
+			</div>
+		</div>
+		<br />
+		<!-- // END .container -->
+	</div>
+	<!-- // END .bg-white -->
+</div>
+<!-- // END #content -->
+

@@ -1,0 +1,54 @@
+<div ng-include="'pages/menubg.html'"></div>
+
+<div class="bg-white" ng-controller="userCtrl">
+	<div class="container">
+	<div class="row">
+			<div class="item col-lg-9 col-md-6 col-xs-12">
+		<div class="page-section" >
+			<form role="form" >
+				<div class="alert alert-danger" ng-show="!mailSent && submitted">
+					<button type="button" class="close" data-dismiss="alert">
+						<span aria-hidden="true">&times;</span><span class="sr-only">Fermer</span>
+					</button>
+					::theMessage::
+				</div>
+
+				<div class="alert alert-success" ng-show="mailSent && submitted">
+					<button type="button" class="close" data-dismiss="alert">
+						<span aria-hidden="true">&times;</span><span class="sr-only">Fermer</span>
+					</button>
+					::theMessage::
+				</div>
+
+				<div class="form-group form-control-default required">
+					<label for="subject1">Objet</label> <input ng-model="emailSubject"
+						type="text" class="form-control" id="subject1" placeholder="Sujet">
+				</div>
+
+				<div class="container lighter">
+					<div text-angular ng-model="emailBody"></div>
+				</div>
+				<div class="text-right">
+					<button type="submit" ng-click="sendMail()" class="btn btn-primary">
+						Envoyer <i class="fa fa-sign-in"></i>
+					</button>
+				</div>
+			</form>
+		
+		</div>
+		
+		</div>
+			<div class="item col-lg-3 col-md-6 col-xs-12">
+				<div class="page-section">
+					<div ng-include="'pages/sidebar.html'"></div>
+				</div>
+			</div>
+		</div>
+		<br />
+		<!-- // END .container -->
+
+	</div>
+	<!-- // END .bg-white -->
+</div>
+<!-- // END #content -->
+

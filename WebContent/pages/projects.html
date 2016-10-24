@@ -1,0 +1,364 @@
+<div ng-include="'pages/menubg.html'"></div>
+<div class="bg-white" ng-controller="projectCtrl">
+	<div class="container">
+		<div class="row">
+			<div class="item col-lg-9 col-md-6 col-xs-12">
+				<div class="page-section">
+
+					<div class="container">
+						<h2>Les Projets</h2>
+					</div>
+					<div id="exTab3">
+						<ul class="nav nav-pills">
+							<li class="active"><a href="#1b" data-toggle="tab">Ajouter
+									un Projet </a></li>
+							<li><a href="#2b" ng-click="getAllProjects()"
+								data-toggle="tab">Les realisations</a></li>
+							<li><a href="#3b" data-toggle="tab">Charger les images
+									d'un Projet</a></li>
+
+						</ul>
+
+						<div class="tab-content clearfix">
+							<div class="tab-pane active" id="1b">
+								<div class="alert alert-danger"
+									ng-show="!projectSaved &&projectSaveSubmitted">
+									<button type="button" class="close" data-dismiss="alert">
+										<span aria-hidden="true">&times;</span><span class="sr-only">Fermer</span>
+									</button>
+									::theProjectMessage::
+								</div>
+
+								<div class="alert alert-success"
+									ng-show="projectSaved &&projectSaveSubmitted">
+									<button type="button" class="close" data-dismiss="alert">
+										<span aria-hidden="true">&times;</span><span class="sr-only">Fermer</span>
+									</button>
+									::theProjectMessage::
+								</div>
+
+
+								<form role="form">
+									<div class="row">
+										<div class="col-md-6">
+											<div class="form-group form-control-default">
+												<label for="projectTitle">Titre de la realisation</label> <input
+													ng-model="theProject.title" type="text"
+													class="form-control" id="projectTitle"
+													placeholder="Titre de la realisation">
+											</div>
+										</div>
+										<div class="col-md-6">
+											<div class="form-group form-control-default">
+												<div class="input-group">
+													<div class="input-group-addon">CFA</div>
+													<input type="text" class="form-control"
+														ng-model="theProject.budget" id="budjet"
+														placeholder="Budjet">
+													<div class="input-group-addon">.00</div>
+												</div>
+											</div>
+										</div>
+									</div>
+
+									<div class="row">
+										<div class="col-md-6">
+											<div class="form-group form-control-default">
+												<label for="sponsors">Sponsors </label> <input
+													ng-model="theProject.sponsors" type="text"
+													class="form-control" id="sponsors" placeholder="Sponsors">
+											</div>
+										</div>
+										<div class="col-md-6">
+											<div class="form-group">
+												<label for="status">Etat d'avancement</label> <select
+													name="select" class="form-control"
+													ng-model="theProject.status" data-style="btn-white"
+													data-size="5">
+													<option value="0">Pas Commence</option>
+													<option value="1">En Cours</option>
+													<option value="2">Annule</option>
+													<option value="3">Termine</option>
+													<option value="4">Reporte</option>
+												</select>
+											</div>
+										</div>
+										
+									</div>
+
+									<div class="row">
+										<div class="col-md-6">
+											<div class="form-group margin-none">
+												<label for="projectedStartDate">Date de Debut
+													Projetee</label> <input id="projectedStartDate"
+													ng-model="theProject.projectedStartDate" type="text"
+													class="form-control datepicker">
+											</div>
+										</div>
+										<div class="col-md-6">
+											<div class="form-group margin-none">
+												<label for="projectedEndDate">Date de Fin Projetee</label> <input
+													id="projectedEndDate"
+													ng-model="theProject.projectedEndDate" type="text"
+													class="form-control datepicker">
+											</div>
+										</div>
+									</div>
+									<div class="row">
+										<div class="col-md-6">
+											<div class="form-group margin-none">
+												<label for="startDate">Date de Debut</label> <input
+													id="startDate" ng-model="theProject.startDate" type="text"
+													class="form-control datepicker">
+											</div>
+										</div>
+										<div class="col-md-6">
+											<div class="form-group margin-none">
+												<label for="endDate">Date de Fin</label> <input id="endDate"
+													ng-model="theProject.endDate" type="text"
+													class="form-control datepicker">
+											</div>
+										</div>
+									</div> 
+
+
+									<div class="row">
+										<div class="col-md-12 col-lg-12">
+											<div class="container lighter">
+												<div text-angular ng-model="theProject.description"></div>
+											</div>
+										</div>
+									</div>
+
+									<button ng-click="createProject()" type="submit"
+										class="btn btn-primary">Enregistrer</button>
+									&nbsp;&nbsp;&nbsp;
+									<button ng-click="clearProject()" type="submit"
+										class="btn btn-danger">Effacer</button>
+								</form>
+
+
+							</div>
+							<div class="tab-pane" id="2b">
+								<h1 class="page-section-heading">Les realisations</h1>
+								<div class="panel panel-default">
+									<!-- Data table -->
+									<table st-table="displayedCollection" st-safe-src="projects"
+										class="table table-striped" cellspacing="0" width="100%">
+										<thead>
+											<tr>
+
+												<th colspan="5"><input st-search
+													placeholder="Rechercher une realisation"
+													class="input-sm form-control" type="search" /></th>
+											</tr>
+											<tr>
+												<th>Titre</th>
+												<th>Sponsors</th>
+												<th>Budjet</th>
+												<th>Debut Projete</th>
+												<th>Fin Projete</th>
+												<th>Debut</th>
+												<th>Fin</th>
+												<th>Status</th>
+												<th ng-show="theUser.canApprove">Supprimer</th>
+												<th ng-show="theUser.canApprove">Selectionner</th>
+
+											</tr>
+										</thead>
+										<tbody>
+											<tr ng-repeat="aProject in displayedCollection">
+												<td>::aProject.title::</td>
+												<td>::aProject.sponsors::</td>
+												<td>::aProject.budget|currency:" CFA "::</td>
+												<td>::aProject.projectedStartDate::</td>
+												<td>::aProject.projectedEndDate::</td>
+												<td>::aProject.startDate::</td>
+												<td>::aProject.endDate::</td>
+												<td>::aProject.statusDescription::</td>
+												<td>
+													<button ng-show="theUser.canApprove" type="button"
+														ng-click="deleteProject(aProject)"
+														class="btn btn-sm btn-danger">
+														<i class="glyphicon glyphicon-remove-circle"> </i>
+													</button>
+												</td>
+												<td>
+													<button ng-show="theUser.canApprove" type="button"
+														ng-click="selectProject(aProject)" class="btn btn-success">
+														<i class="glyphicon glyphicon-ok"> </i>
+													</button>
+												</td>
+											</tr>
+
+										</tbody>
+										<tfoot>
+											<tr>
+												<td colspan="7" class="text-center">
+													<div st-pagination="" st-items-by-page="3"
+														st-displayed-pages="100"></div>
+												</td>
+											</tr>
+										</tfoot>
+									</table>
+									<!-- // Data table -->
+								</div>
+
+
+							</div>
+							<div class="tab-pane" id="3b">
+								<div class="panel panel-default" ng-show="projectSelected">
+									<div class="panel-heading">
+										<h3>
+											<strong>::theProject.title::</strong>
+										</h3>
+									</div>
+									<div class="panel-body">
+										<ul>
+											<li>::theProject.description::</li>
+											<li>Planifie pour ::theProject.projectedStartDate::</li>
+										</ul>
+									</div>
+
+								</div>
+								<div class="alert alert-danger" ng-show="!projectSelected">
+									<button type="button" class="close" data-dismiss="alert">
+										<span aria-hidden="true">&times;</span><span class="sr-only">Fermer</span>
+									</button>
+									Veuillez selectionner une realisation
+								</div>
+
+								<div class="row" ng-show="projectSelected">
+
+									<div class="col-md-3">
+
+										<div ng-show="projectUploader.isHTML5">
+											<!-- 3. nv-file-over uploader="link" over-class="className" -->
+											<div class="well my-drop-zone" nv-file-over=""
+												uploader="projectUploader">Vous pouvez aussi
+												drag-n-drop les photos dans cette zone</div>
+
+											<!-- Example: nv-file-drop="" uploader="{Object}" options="{Object}" filters="{String}" 
+									<div nv-file-drop="" uploader="uploader"
+										options="{ url: '/foo' }">
+										<div nv-file-over="" uploader="uploader"
+											over-class="another-file-over-class"
+											class="well my-drop-zone">Another drop zone with its
+											own settings</div>-->
+										</div>
+									</div>
+
+									<!-- Example: nv-file-select="" uploader="{Object}" options="{Object}" filters="{String}" -->
+									<input type="file" nv-file-select="" uploader="projectUploader"
+										multiple /><br />
+
+								</div>
+
+								<div class="col-md-9" style="margin-bottom: 40px"
+									ng-show="projectSelected">
+									<h2>Choisissez seulement des photos</h2>
+									<p>Nombre de photos: :: projectUploader.queue.length ::</p>
+
+									<table class="table">
+										<thead>
+											<tr>
+												<th width="50%">Nom</th>
+												<th ng-show="projectUploader.isHTML5">Tailler</th>
+												<th ng-show="projectUploader.isHTML5">Avancement</th>
+												<th>Etat</th>
+												<th>Actions</th>
+											</tr>
+										</thead>
+										<tbody>
+											<tr ng-repeat="item in projectUploader.queue">
+												<td><strong>:: item.file.name ::</strong> <!-- Image preview -->
+													<!--auto height--> <!--<div ng-thumb="{ file: item.file, width: 100 }"></div>-->
+													<!--auto width-->
+													<div ng-show="projectUploader.isHTML5"
+														ng-thumb="{ file: item._file, height: 100 }"></div> <!--fixed width and height -->
+													<!--<div ng-thumb="{ file: item.file, width: 100, height: 100 }"></div>-->
+												</td>
+												<td ng-show="projectUploader.isHTML5" nowrap>::
+													item.file.size/1024/1024|number:2 :: MB</td>
+												<td ng-show="projectUploader.isHTML5">
+													<div class="progress" style="margin-bottom: 0;">
+														<div class="progress-bar" role="progressbar"
+															ng-style="{ 'width': item.progress + '%' }"></div>
+													</div>
+												</td>
+												<td class="text-center"><span ng-show="item.isSuccess"><i
+														class="glyphicon glyphicon-ok"></i></span> <span
+													ng-show="item.isCancel"><i
+														class="glyphicon glyphicon-ban-circle"></i></span> <span
+													ng-show="item.isError"><i
+														class="glyphicon glyphicon-remove"></i></span></td>
+												<td nowrap>
+													<button type="button" class="btn btn-success btn-xs"
+														ng-click="item.upload()"
+														ng-disabled="item.isReady || item.isUploading || item.isSuccess">
+														<span class="glyphicon glyphicon-upload"></span> Charger
+													</button>
+													<button type="button" class="btn btn-warning btn-xs"
+														ng-click="item.cancel()" ng-disabled="!item.isUploading">
+														<span class="glyphicon glyphicon-ban-circle"></span>
+														Annuler
+													</button>
+													<button type="button" class="btn btn-danger btn-xs"
+														ng-click="item.remove()">
+														<span class="glyphicon glyphicon-trash"></span> Enlever
+													</button>
+												</td>
+											</tr>
+										</tbody>
+									</table>
+
+									<div>
+										<div>
+											Avancement:
+											<div class="progress" style="">
+												<div class="progress-bar" role="progressbar"
+													ng-style="{ 'width': projectUploader.progress + '%' }"></div>
+											</div>
+										</div>
+										<button type="button" class="btn btn-success btn-s"
+											ng-click="projectUploader.uploadAll()"
+											ng-disabled="!projectUploader.getNotUploadedItems().length">
+											<span class="glyphicon glyphicon-upload"></span> Charger
+											toutes les photos
+										</button>
+										<button type="button" class="btn btn-warning btn-s"
+											ng-click="projectUploader.cancelAll()"
+											ng-disabled="!projectUploader.isUploading">
+											<span class="glyphicon glyphicon-ban-circle"></span> Annuler
+											tout
+										</button>
+										<button type="button" class="btn btn-danger btn-s"
+											ng-click="projectUploader.clearQueue()"
+											ng-disabled="!projectUploader.queue.length">
+											<span class="glyphicon glyphicon-trash"></span> Enlever tout
+										</button>
+									</div>
+
+								</div>
+
+							</div>
+						</div>
+					</div>
+				</div>
+			</div>
+			<div class="item col-lg-3 col-md-6 col-xs-12">
+				<div class="page-section">
+					<div ng-include="'pages/sidebar.html'"></div>
+				</div>
+			</div>
+		</div>
+
+
+
+	</div>
+
+
+	<br />
+
+</div>
+<!-- // END .bg-white -->

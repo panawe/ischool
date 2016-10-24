@@ -1,0 +1,200 @@
+<div ng-include="'pages/menubg.html'"></div>
+<div class="bg-white" ng-controller="sponsorCtrl">
+	<div class="container">
+		<div class="row">
+			<div class="item col-lg-9 col-md-6 col-xs-12">
+				<div class="page-section">
+
+					<div class="container">
+						<h2>Les Sponsors</h2>
+					</div>
+					<div id="exTab3" >
+						<ul class="nav nav-pills">
+							<li class="active"><a href="#1b" data-toggle="tab">Ajouter
+									un sponsor</a></li>
+							<li><a href="#2b" ng-click="getAllSponsors()"
+								data-toggle="tab">Les sponsors</a></li>
+							<li ng-show="theUser.canApprove"><a href="#3b"
+								data-toggle="tab">Publicites</a></li>
+						</ul>
+
+						<div class="tab-content clearfix">
+							<div class="tab-pane active" id="1b">
+								<div class="alert alert-danger"
+									ng-show="!sponsorSaved && sponsorSaveSubmitted">
+									<button type="button" class="close" data-dismiss="alert">
+										<span aria-hidden="true">&times;</span><span class="sr-only">Fermer</span>
+									</button>
+									::theSponsorMessage::
+								</div>
+
+								<div class="alert alert-success"
+									ng-show="sponsorSaved && sponsorSaveSubmitted">
+									<button type="button" class="close" data-dismiss="alert">
+										<span aria-hidden="true">&times;</span><span class="sr-only">Fermer</span>
+									</button>
+									::theSponsorMessage::
+								</div>
+
+
+								<form role="form">
+									<div class="row">
+										<div class="col-md-6">
+											<div class="form-group form-control-default">
+												<label for="sponsorName">Nom du sponsor</label> <input
+													ng-model="theSponsor.name" type="text" class="form-control"
+													id="sponsorName" placeholder="Nom du sponsor">
+											</div>
+										</div>
+										<div class="col-md-6">
+											<div class="form-group form-control-default">
+												<label for="sponsorDescription">Description</label>
+												<textarea rows="4" cols="50"
+													ng-model="theSponsor.description" type="text"
+													class="form-control" id="sponsorDescription"
+													placeholder="Description" />
+											</div>
+										</div>
+									</div>
+
+									<div class="row">
+										<div class="col-md-6">
+											<div class="form-group form-control-default">
+												<label for="sponsorAddress">Adresse</label> <input
+													ng-model="theSponsor.address" type="text"
+													class="form-control" id="sponsorAddress"
+													placeholder="Address">
+											</div>
+										</div>
+										<div class="col-md-6">
+											<div class="form-group form-control-default">
+												<label for="sponsorPhone">Phone</label> <input
+													ng-model="theSponsor.phone" type="text"
+													class="form-control" id="sponsorPhone" placeholder="Phone">
+											</div>
+										</div>
+									</div>
+
+									<div class="row">
+										<div class="col-md-6">
+											<div class="form-group form-control-default">
+												<label for="sponsorEmail">Email</label> <input
+													ng-model="theSponsor.email" type="text"
+													class="form-control" id="sponsorEmail" placeholder="Email">
+											</div>
+										</div>
+										<div class="col-md-6">
+											<div class="form-group form-control-default">
+												<label for="sponsorWebSite">Web site</label> <input
+													ng-model="theSponsor.webSite" type="text"
+													class="form-control" id="sponsorWebSite"
+													placeholder="Web Site">
+											</div>
+										</div>
+									</div>
+
+									<div class="row">
+										<div class="col-md-6">
+											<div class="form-group form-control-default">
+												<label for="sponsorContact">Contact</label> <input
+													ng-model="theSponsor.contact" type="text"
+													class="form-control" id="sponsorContact"
+													placeholder="Contact">
+											</div>
+										</div>
+									</div>
+
+									<button ng-click="createSponsor()" type="submit"
+										class="btn btn-primary">Enregistrer</button>
+									&nbsp;&nbsp;&nbsp;
+									<button ng-click="clearSponsor()" type="submit"
+										class="btn btn-danger">Effacer</button>
+								</form>
+							</div>
+
+							<div class="tab-pane" id="2b">
+								<h4 class="page-section-heading">Les sponsors</h4>
+								<div class="panel panel-default">
+									<!-- Data table -->
+									<table st-table="displayedCollection" st-safe-src="projects"
+										class="table table-striped" cellspacing="0" width="100%">
+										<thead>
+											<tr>
+
+												<th colspan="5"><input st-search
+													placeholder="Rechercher un sponsor"
+													class="input-sm form-control" type="search" /></th>
+											</tr>
+											<tr>
+												<th>Nom</th>
+												<th>Description</th>
+												<th>Adresse</th>
+												<th>Phone</th>
+												<th>Email</th>
+												<th>Web Site</th>
+												<th>Contact</th>
+												<th ng-show="theUser.canApprove">Supprimer</th>
+												<th ng-show="theUser.canApprove">Selectionner</th>
+											</tr>
+										</thead>
+										<tbody>
+											<tr ng-repeat="aSponsor in sponsors">
+												<td>::aSponsor.name::</td>
+												<td>::aSponsor.description::</td>
+												<td>::aSponsor.address::</td>
+												<td>::aSponsor.phone::</td>
+												<td>::aSponsor.email::</td>
+												<td>::aSponsor.webSite::</td>
+												<td>::aSponsor.contact::</td>
+												<td>
+													<button ng-show="theUser.canApprove &&!aSponsor.deleted"
+														type="button" ng-click="deleteSponsor(aSponsor)"
+														class="btn btn-sm btn-danger">
+														<i class="glyphicon glyphicon-remove-circle"> </i>
+													</button>
+												</td>
+												<td>
+													<button ng-show="theUser.canApprove &&!aSponsor.deleted"
+														type="button" ng-click="selectSponsor(aSponsor)"
+														class="btn btn-success">
+														<i class="glyphicon glyphicon-ok"> </i>
+													</button>
+												</td>
+											</tr>
+
+										</tbody>
+										<tfoot>
+											<tr>
+												<td colspan="7" class="text-center">
+													<div st-pagination="" st-items-by-page="3"
+														st-displayed-pages="100"></div>
+												</td>
+											</tr>
+										</tfoot>
+									</table>
+									<!-- // Data table -->
+								</div>
+							</div>
+
+							<div class="tab-pane" id="3b">
+								<div ng-include="'pages/marketing.html'"></div>
+							</div>
+							<!--  End of advertisement -->
+						</div>
+					</div>
+				</div>
+
+			</div>
+			<div class="item col-lg-3 col-md-6 col-xs-12">
+				<div class="page-section">
+					<div ng-include="'pages/sidebar.html'"></div>
+				</div>
+			</div>
+		</div>
+		<br />
+
+	</div>
+
+	<!-- // END Container -->
+</div>
+<!-- // END .bg-white -->

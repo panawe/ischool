@@ -1,0 +1,74 @@
+<div ng-include="'pages/menubg.html'"></div>
+
+<div class="bg-white" ng-controller="eventCtrl">
+ 
+		<div class="container">
+		
+				<div class="row">
+			<div class="item col-lg-9 col-md-6 col-xs-12">
+			<h2>Rapports de reunions</h2>
+			<p>
+				<strong>Note:</strong> Cliquez sur l'entete pour voir le rapport ou
+				l'album photo.
+			</p>
+			<div class="panel-group" id="accordion">
+				<div class="panel panel-default"
+					ng-repeat="aEvent in eventsWithAlbumReport">
+					<div class="panel-heading"
+						style="background-color: #26A69A; color: white;">
+						<h4 class="panel-title">
+							<a data-toggle="collapse" data-parent="#accordion"
+								href="#::aEvent.id::">::aEvent.title:: |
+								::aEvent.startsAt|date:: - ::aEvent.city::</a>
+						</h4>
+					</div>
+					<div id="::aEvent.id::" class="panel-collapse collapse">
+					<div ng-show="aEvent.hasReport" class="panel-body" escape="false">
+					 
+					<p ng-bind-html="aEvent.report"></p>
+					</div>
+						<div ng-show="aEvent.hasPhoto" class="panel-body">
+						
+							<div class="panel panel-default relative">
+								<div
+									class="ribbon-heading text-h5 ribbon-primary inline left absolute margin-none">::aEvent.albumTag::</div>
+								<div class="cover hover overlay margin-none">
+									<img src="images/events/::aEvent.id::/::aEvent.id::_1.jpg"
+										alt="location" class="img-responsive" /> <a
+										href="#pages/eventAlbum" ng-click="getEventAlbum(aEvent)"
+										class="overlay overlay-full overlay-bg-black overlay-hover">
+										<span class="v-center"> <span
+											class="btn btn-circle btn-white"><i class="fa fa-eye"></i></span>
+									</span>
+									</a>
+								</div>
+
+							</div>
+						</div>
+						
+					</div>
+				</div>
+
+
+			</div>
+			
+				</div>
+			<div class="item col-lg-3 col-md-6 col-xs-12">
+				<div class="page-section">
+					<div ng-include="'pages/sidebar.html'"></div>
+				</div>
+			</div>
+		</div>
+		</div>
+
+	 
+
+
+	<br />
+ 
+</div>
+<!-- // END .bg-white -->
+
+
+<!-- // END #content -->
+
